@@ -69,11 +69,17 @@ namespace PhotoStudioApp.Views
             {
                 foreach (var worker in workerList)
                 {
-                    WorkerCards workerCards = new(worker);
+                    WorkerCards workerCards = new(worker, MainGrid);
+                    workerCards.Update += WorkerCards_Update;
                     MainPanel.Children.Add(workerCards);
                 }
             }
            
+        }
+
+        private void WorkerCards_Update(object? sender, EventArgs e)
+        {
+            InitData();
         }
 
         private void FilteredComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

@@ -46,7 +46,7 @@ namespace PhotoStudioApp.Views
             LoadSerivec();
             LoadAddSerivec();
         }
-        
+        //Загрузка Основных услуг
         private void LoadSerivec()
         {
             foreach (var service in servicesList)
@@ -56,6 +56,7 @@ namespace PhotoStudioApp.Views
                 StackPanelServices.Children.Add(serviceCardControl);
             }
         }
+        //Загрузка Дополнительных услуг
         private void LoadAddSerivec()
         {
             foreach (var addService in addServicesList)
@@ -65,12 +66,13 @@ namespace PhotoStudioApp.Views
                 StackPanelServices.Children.Add(serviceCardControl);
             }
         }
+        //Фильтрация
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ComboBox comboBox = sender as ComboBox;
             if (comboBox != null)
             {
-                var selectedItem = comboBox.SelectedItem as ComboBoxItem;
+                var selectedItem = comboBox.SelectedItem as ComboBoxItem; 
                 if (selectedItem != null)
                 {
                     TextBlock textBlock = selectedItem.Content as TextBlock;
@@ -105,6 +107,7 @@ namespace PhotoStudioApp.Views
             }
         }
 
+        //Поиск услуги по запросу поисковой строки
         private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             FilteretCombobox.SelectedIndex = 0;
