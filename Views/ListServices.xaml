@@ -61,8 +61,11 @@
             </StackPanel>
         </StackPanel>
 
-        <ScrollViewer Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Top">
-            <StackPanel x:Name="StackPanelServices"/>
-        </ScrollViewer>
+        <Grid Name="MainGrid" Grid.Row="1">
+            <ScrollViewer Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+                <StackPanel x:Name="StackPanelServices"/>
+            </ScrollViewer>
+        </Grid>
+          
     </Grid>
 </UserControl>

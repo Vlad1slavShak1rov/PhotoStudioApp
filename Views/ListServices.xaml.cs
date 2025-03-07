@@ -37,6 +37,11 @@ namespace PhotoStudioApp.Views
         private void InitData()
         {
             StackPanelServices.Children.Clear();
+            if (servicesList != null && addServicesList != null)
+            {
+                servicesList.Clear();
+                addServicesList.Clear();
+            }
             using var context = new MyDBContext();
             RepositoryServices repositoryServices = new(context);
             RepositoryAdditionalService repositoryAdditionalService = new(context);
@@ -51,8 +56,9 @@ namespace PhotoStudioApp.Views
         {
             foreach (var service in servicesList)
             {
-                ServiceCardControl serviceCardControl = new(service, isAdmin);
+                ServiceCardControl serviceCardControl = new(service, isAdmin, MainGrid);
                 serviceCardControl.Margin = new Thickness(0, 5, 0, 0);
+                serviceCardControl.Update += ServiceCardControl_Update;
                 StackPanelServices.Children.Add(serviceCardControl);
             }
         }
@@ -61,8 +67,9 @@ namespace PhotoStudioApp.Views
         {
             foreach (var addService in addServicesList)
             {
-                ServiceCardControl serviceCardControl = new(addService, isAdmin);
+                ServiceCardControl serviceCardControl = new(addService, isAdmin, MainGrid);
                 serviceCardControl.Margin = new Thickness(0, 5, 0, 0);
+                serviceCardControl.Update += ServiceCardControl_Update;
                 StackPanelServices.Children.Add(serviceCardControl);
             }
         }
@@ -118,8 +125,9 @@ namespace PhotoStudioApp.Views
             {
                 if (service.ServiceName.ToLower().Contains(searched))
                 {
-                    ServiceCardControl serviceCardControl = new(service, isAdmin);
+                    ServiceCardControl serviceCardControl = new(service, isAdmin, MainGrid);
                     serviceCardControl.Margin = new Thickness(0, 5, 0, 0);
+                    serviceCardControl.Update += ServiceCardControl_Update;
                     StackPanelServices.Children.Add(serviceCardControl);
                 }
               
@@ -128,12 +136,18 @@ namespace PhotoStudioApp.Views
             {
                 if (addService.ServiceName.ToLower().Contains(searched))
                 {
-                    ServiceCardControl serviceCardControl = new(addService, isAdmin);
+                    ServiceCardControl serviceCardControl = new(addService, isAdmin, MainGrid);
                     serviceCardControl.Margin = new Thickness(0, 5, 0, 0);
+                    serviceCardControl.Update += ServiceCardControl_Update;
                     StackPanelServices.Children.Add(serviceCardControl);
                 }
 
             }
+        }
+
+        private void ServiceCardControl_Update(object? sender, EventArgs e)
+        {
+            InitData();
         }
     }
 }

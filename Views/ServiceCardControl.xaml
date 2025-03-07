@@ -22,8 +22,8 @@
                 <Label Name="CostLabel" Content="Стоимость: " FontSize="14" FontWeight="Bold" Foreground="{StaticResource Text}"/>
 
                 <StackPanel Name="AdminButtons" Orientation="Horizontal" Margin="0 20 0 0" Visibility="Collapsed">
-                    <Button Name="AddButton" Content="Добавить" Background="{StaticResource Panel}" FontSize="14" Margin="0 0 10 0"/>
-                    <Button Name="DeleteButton" Content="Удалить" Background="{StaticResource Panel}" FontSize="14"/>
+                    <Button Name="EditButton" Content="Изменить" Background="{StaticResource Panel}" FontSize="14" Margin="0 0 10 0" Click="EditButton_Click"/>
+                    <Button Name="DeleteButton" Content="Удалить" Background="{StaticResource Panel}" FontSize="14" Click="DeleteButton_Click"/>
                 </StackPanel>
             </StackPanel>
         </Expander.Content>

@@ -17,6 +17,7 @@ namespace PhotoStudioApp.Database.DAL
         }
         public List<Services> GetAll() => context.Services.ToList();
         public Services GetByID(int id) => context.Services.FirstOrDefault(add => add.ID == id);
+        public Services GetByName(string name) => context.Services.FirstOrDefault(ser => ser.ServiceName == name);
         public void Create(Services entity)
         {
             context.Services.Add(entity);

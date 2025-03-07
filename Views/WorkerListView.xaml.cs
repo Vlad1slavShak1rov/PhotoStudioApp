@@ -82,10 +82,12 @@ namespace PhotoStudioApp.Views
             InitData();
         }
 
+        //Фильтрация
         private void FilteredComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var selectedItem = FilteredComboBox.SelectedItem as ComboBoxItem;
             string filter = selectedItem.Content.ToString();
+            //Список для хранения отфильтрованных сотрудников
             List<Worker> filtredList;
             switch (filter)
             {
