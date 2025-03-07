@@ -17,22 +17,31 @@
         <StackPanel>
             <Label Content="Сотрудники:" FontWeight="Bold" FontSize="16"/>
             <StackPanel Orientation="Horizontal">
-                <Label Name="PhotographLabel" Content="Фотограф: Иван Иванов" Margin="0 0 0 0" FontSize="14" FontWeight="Bold" Foreground="{StaticResource Text}"/>
+                <Label Name="PhotographLabel" Content="Фотограф: Иван Иванов" FontSize="14" FontWeight="Bold" Foreground="{StaticResource Text}"/>
                 <Label Name="VisagisteLabel" Content="Визажист: Иван Иванов" FontSize="14" FontWeight="Bold" Foreground="{StaticResource Text}"/>
             </StackPanel>
             <Label Content="Услуги:" FontWeight="Bold" FontSize="16"/>
             <StackPanel Orientation="Horizontal">
-                <Label Name="ServiceLabel" Content="Основная услуга: Иван Иванов" Margin="0 0 0 0" FontSize="14" FontWeight="Bold" Foreground="{StaticResource Text}"/>
-                <Label Name ="AddServiceLabel" Content="Дополнительная: Иван Иванов" Margin="0 0 0 0" FontSize="14" FontWeight="Bold" Foreground="{StaticResource Text}"/>
+                <Label Name="ServiceLabel" Content="Основная услуга: Иван Иванов" FontSize="14" FontWeight="Bold" Foreground="{StaticResource Text}"/>
+                <Label Name ="AddServiceLabel" Content="Дополнительная: Иван Иванов" FontSize="14" FontWeight="Bold" Foreground="{StaticResource Text}"/>
             </StackPanel>
             <Label Content="Место:" FontWeight="Bold" FontSize="16"/>
             <StackPanel Orientation="Horizontal">
                 <Label Name="HallLabel" Content="Холл: " FontSize="14" FontWeight="Bold" Foreground="{StaticResource Text}"/>
             </StackPanel>
-            <Label Content="Место:" FontWeight="Bold" FontSize="16"/>
+            <Label Content="Стоимость:" FontWeight="Bold" FontSize="16"/>
             <StackPanel Orientation="Horizontal">
                 <Label Name="CostLabel" Content="Стоимость: " FontSize="14" FontWeight="Bold" Foreground="{StaticResource Text}"/>
             </StackPanel>
+
+            <StackPanel Name="AdminPanel" VerticalAlignment="Stretch">
+                <Label Content="Админ кнопки:" FontWeight="Bold" FontSize="16"/>
+                <Grid>
+                    <Button x:Name="UpdateButton" Content="Изменить" Margin="0 0 80 0" HorizontalAlignment="Right"/>
+                    <Button x:Name="DeleteButton" Content="Удалить" HorizontalAlignment="Right"/>
+                </Grid>
+            </StackPanel>
+
         </StackPanel>
     </Expander>
 </UserControl>

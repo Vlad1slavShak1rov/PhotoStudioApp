@@ -61,7 +61,6 @@ namespace PhotoStudioApp.Windows
         {
             createBooking.CloseButton -= CreateBooking_CloseButton;
             createBooking = null;
-
             MainGrid.Children.Clear();
         }
         private void ListBookingButton_Click(object sender, RoutedEventArgs e)
@@ -111,6 +110,13 @@ namespace PhotoStudioApp.Windows
             settingsView.CloseClick -= SettingsView_CloseClick;
             settingsView = null;
             WorkerMainPanel.Children.Clear();
+        }
+
+        private void AllBooking_Click(object sender, RoutedEventArgs e)
+        {
+            AdminMainPanel.Children.Clear();
+            MyBooking myBooking = new(_user);
+            AdminMainPanel.Children.Add(myBooking);
         }
     }
 }

@@ -20,8 +20,8 @@
                     <TextBlock Text="Пароль" HorizontalAlignment="Center" FontSize="14" Foreground="{StaticResource Panel}" FontWeight="UltraBold"/>
                     <PasswordBox Name="PasswordBox" Width="175" HorizontalAlignment="Center" Margin="10 0 0 10" FontSize="14"/>
 
-                    <Button Name="SingInButton" Content="Войти" Width ="120" Margin = "0 0 0 10" Background="{StaticResource ButtonColor}" Foreground="{StaticResource Text}" Click="SingInButton_Click"/>
-                    <Button Name="SignUpButton" Content="Зарегистрироваться" Width ="120" Background="{StaticResource ButtonColor}" Foreground="{StaticResource Text}" Click="SignUpButton_Click"/>
+                    <Button Name="SingInButton" Content="Войти" HorizontalAlignment="Center" Width ="120" Margin = "0 0 0 10" Background="{StaticResource ButtonColor}" Foreground="{StaticResource Text}" Click="SingInButton_Click"/>
+                    <Button Name="SignUpButton" Content="Зарегистрироваться" HorizontalAlignment="Center" Width ="120" Background="{StaticResource ButtonColor}" Foreground="{StaticResource Text}" Click="SignUpButton_Click"/>
                 </StackPanel>
             </Border>
         </StackPanel>

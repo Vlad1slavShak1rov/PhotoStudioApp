@@ -32,6 +32,8 @@ namespace PhotoStudioApp.Views
                 InitData(user);
             else if ((Enums.Role)user.Role == Enums.Role.Worker)
                 InitDataWorker(user);
+            else
+                InitAll();
         }
         
         private void InitData(User user)
@@ -53,7 +55,7 @@ namespace PhotoStudioApp.Views
                     Message.Info($"Запись {booking.DateBooking.Date} без отзыва\nПожалуйста, оставьте свои впечатления о фотоссесии!");
                 }
 
-                BookingCard bookingCard = new(booking);
+                BookingCard bookingCard = new(booking, false);
                 MainPanel.Children.Add(bookingCard);
             }
         }
@@ -82,9 +84,23 @@ namespace PhotoStudioApp.Views
 
                 foreach (var booking in bookingList)
                 {
-                    BookingCard bookingCard = new(booking);
+                    BookingCard bookingCard = new(booking, false);
                     MainPanel.Children.Add(bookingCard);
                 }
+            }
+        }
+
+        //Загрузка всего списка бронирования для администратора
+        private void InitAll()
+        {
+            using var context = new MyDBContext();
+            RepositoryBooking repositoryBooking = new(context);
+            var bookingList = repositoryBooking.GetAll();
+
+            foreach (var booking in bookingList)
+            {
+                BookingCard bookingCard = new(booking, true);
+                MainPanel.Children.Add(bookingCard);
             }
         }
     }

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PhotoStudioApp.Windows"
         mc:Ignorable="d"
-        Title="Главное меню" Height="650" Width="1000" MinHeight="450" MinWidth="800" WindowStartupLocation="CenterScreen">
+        Title="Главное меню" Height="650" Width="1000" MinHeight="650" MinWidth="1000" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -33,7 +33,7 @@
     </Window.Resources>
     <Grid Background="{StaticResource BackgroundColor}" >
         <!--Грид для клиента-->
-        <Grid x:Name="CustomerGrid" Visibility="Visible">
+        <Grid x:Name="CustomerGrid" Visibility="Collapsed">
             <Grid.RowDefinitions>
                 <RowDefinition Height="70"/>
                 <RowDefinition Height="*"/>
@@ -142,7 +142,7 @@
             <Grid Grid.Row="0" Background="{StaticResource Panel}" HorizontalAlignment="Stretch">
                 <Grid HorizontalAlignment="Center">
                     <StackPanel Margin="0 0 300 0" HorizontalAlignment="Left">
-                        <Button Name="AllBooking" Height="36" Width="39" Margin="0 9 0 0" BorderBrush="{x:Null}" Style="{StaticResource ButtonOpacity}" Click="ListBookingButton_Click" >
+                        <Button Name="AllBooking" Height="36" Width="39" Margin="0 9 0 0" BorderBrush="{x:Null}" Style="{StaticResource ButtonOpacity}" Click="AllBooking_Click" >
                             <Button.Background>
                                 <ImageBrush ImageSource="/Resources/Pictures/myOrderIco.png"/>
                             </Button.Background>
@@ -178,7 +178,7 @@
                 </StackPanel>
             </Grid>
 
-            <Grid Name="AdminMainPanel"/>
+            <Grid Name="AdminMainPanel" Grid.Row="1"/>
         </Grid>
     </Grid>
 </Window>

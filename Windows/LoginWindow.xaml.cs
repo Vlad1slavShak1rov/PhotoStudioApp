@@ -74,6 +74,14 @@ public partial class LoginWindow : Window
                             }
                         }
                     }
+                    //Проверка, если роль пользователя равна роли Админа
+                    else if ((Enums.Role)user.Role == Enums.Role.Admin)
+                    {
+                        RepositoryCustomer repositoryCustomer = new(context);
+                        var customer = repositoryCustomer.GetByUserID(user.ID);
+                        if (customer != null) repositoryCustomer.Delete(customer.ID);
+                    }
+
                     Message.Success("Успешно!");
                     MainWindow mainWindow = new(user);
                     mainWindow.Show();

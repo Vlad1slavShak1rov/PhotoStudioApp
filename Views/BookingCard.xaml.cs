@@ -24,14 +24,14 @@ namespace PhotoStudioApp.Views
     /// </summary>
     public partial class BookingCard : UserControl
     {
-        public BookingCard(Booking booking)
+        public BookingCard(Booking booking, bool IsAdmin)
         {
             InitializeComponent();
-            InitData(booking);
+            InitData(booking, IsAdmin);
         }
 
         //Инициализация карточки с заказами текущего клиента
-        private void InitData(Booking booking)
+        private void InitData(Booking booking, bool IsAdmin)
         {
             BookingCardExpander.Header = $"Запись на {booking.DateBooking}";
 
@@ -59,6 +59,9 @@ namespace PhotoStudioApp.Views
 
             HallLabel.Content = $"Холл: {hall.Description}";
             CostLabel.Content = $"Стоимость: {booking.CostServices}";
+
+            //Показываем или прячем кнопки администратора
+            AdminPanel.Visibility = IsAdmin ? Visibility.Visible: Visibility.Collapsed;
         }
     }
 }
