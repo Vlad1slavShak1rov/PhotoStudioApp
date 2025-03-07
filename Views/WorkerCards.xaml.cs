@@ -70,6 +70,9 @@ namespace PhotoStudioApp.Views
         private void EditButton_Click(object sender, RoutedEventArgs e)
         {
             _editWorker = new(_currentWorker);
+            _editWorker.HorizontalAlignment = HorizontalAlignment.Center;
+            _editWorker.VerticalAlignment = VerticalAlignment.Top;
+            _editWorker.Margin = new Thickness(0,10,0,0);
             _editWorker.Close += _editWorker_Close;
             _mainGrid.Children.Add(_editWorker);
 

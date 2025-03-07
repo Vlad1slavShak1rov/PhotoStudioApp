@@ -87,7 +87,7 @@ namespace PhotoStudioApp.Views
             editServiceView = new(services);
 
             editServiceView.HorizontalAlignment = HorizontalAlignment.Center;
-            editServiceView.VerticalAlignment = VerticalAlignment.Top;
+            editServiceView.VerticalAlignment = VerticalAlignment.Center;
             editServiceView.Margin = new Thickness(0,10,0, 0);
 
             editServiceView.Close += EditServiceView_Close;
@@ -101,7 +101,7 @@ namespace PhotoStudioApp.Views
             editServiceView = new(services);
 
             editServiceView.HorizontalAlignment = HorizontalAlignment.Center;
-            editServiceView.VerticalAlignment = VerticalAlignment.Top;
+            editServiceView.VerticalAlignment = VerticalAlignment.Center;
             editServiceView.Margin = new Thickness(0, 10, 0, 0);
 
             editServiceView.Close += EditServiceView_Close;

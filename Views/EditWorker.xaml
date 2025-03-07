@@ -13,26 +13,26 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid Background="White">
+    <Grid Background="{StaticResource Panel}">
         <StackPanel>
             <Label Content="Окно редактирования" HorizontalAlignment="Center" FontSize="20" FontWeight="ExtraBold" Foreground="{StaticResource add}"/>
            
             <Label Content="Фамилия" FontSize="16" FontWeight="ExtraBlack" Foreground="{StaticResource add}"/>
-            <TextBox Name="SecondNameBox" Width="200" Height="25" Margin="5 0 0 0" HorizontalAlignment="Left"/>
+            <TextBox Name="SecondNameBox" Width="200" Height="25" Margin="5 0 0 0" HorizontalAlignment="Left" FontSize="16"/>
             
              <Label Content="Имя" FontSize="16" FontWeight="ExtraBlack" Foreground="{StaticResource add}"/>
-            <TextBox Name="NameBox" Width="200" Height="25" Margin="5 0 0 0" HorizontalAlignment="Left"/>
+            <TextBox Name="NameBox" Width="200" Height="25" Margin="5 0 0 0" HorizontalAlignment="Left" FontSize="16"/>
             
              <Label Content="Отчество" FontSize="16" FontWeight="ExtraBlack" Foreground="{StaticResource add}"/>
-            <TextBox Name="LastNameBox" Width="200" Height="25" Margin="5 0 0 0" HorizontalAlignment="Left"/>
+            <TextBox Name="LastNameBox" Width="200" Height="25" Margin="5 0 0 0" HorizontalAlignment="Left" FontSize="16"/>
             
              <Label Content="Логин" FontSize="16" FontWeight="ExtraBlack" Foreground="{StaticResource add}"/>
-            <TextBox Name="LoginBox" Width="200" Height="25" Margin="5 0 0 0" HorizontalAlignment="Left"/>
+            <TextBox Name="LoginBox" Width="200" Height="25" Margin="5 0 0 0" HorizontalAlignment="Left" FontSize="16"/>
             
              <Label Content="Пароль" FontSize="16" FontWeight="ExtraBlack" Foreground="{StaticResource add}"/>
-            <TextBox Name="PasswordBox" Width="200" Height="25" Margin="5 0 0 0" HorizontalAlignment="Left"/>
+            <TextBox Name="PasswordBox" Width="200" Height="25" Margin="5 0 0 0" HorizontalAlignment="Left" FontSize="16"/>
 
-            <Button x:Name="SaveButton" Content="Сохранить" Width="120" Margin="0 50 0 10" Background="{StaticResource ButtonColor}" Foreground="{StaticResource Text}" FontSize="14" Click="SaveButton_Click"/>
+            <Button x:Name="SaveButton" Content="Сохранить" Width="120" Margin="0 20 0 10" Background="{StaticResource ButtonColor}" Foreground="{StaticResource Text}" FontSize="14" Click="SaveButton_Click"/>
             <Button x:Name="ExitButton" Content="Выход" Width="120" Background="{StaticResource ButtonColor}" Foreground="{StaticResource Text}" FontSize="14" Click="ExitButton_Click"/>
         </StackPanel>
     </Grid>
