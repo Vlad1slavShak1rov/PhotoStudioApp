@@ -20,6 +20,8 @@ namespace PhotoStudioApp.Database.DAL
         public List<Booking> GetAllByPhotograph(int id) => context.Bookings.Where(bkg => bkg.PhotographID == id).ToList();
         public List<Booking> GetAllByVisagiste(int id) => context.Bookings.Where(bkg => bkg.VisagisteID == id).ToList();
         public Booking GetByID(int id) => context.Bookings.FirstOrDefault(add => add.ID == id);
+        public Booking GetByPhotographID(int id) => context.Bookings.FirstOrDefault(add => add.PhotographID == id);
+        public Booking GetByVisagisteID(int id) => context.Bookings.FirstOrDefault(add => add.VisagisteID == id);
         public void Create(Booking entity)
         {
             context.Bookings.Add(entity);

@@ -37,6 +37,7 @@ namespace PhotoStudioApp.Views
 
         }
 
+        //Получаем сотрудника
         private void GetWorker()
         {
             using var context = new MyDBContext();
@@ -44,6 +45,7 @@ namespace PhotoStudioApp.Views
             _currentWorker = repositoryWorker.GetByUserID(_currentUser.ID);
         }
 
+        //Инициализируем TextBox
         private void InitData()
         {
             SurnameTextBox.Text = _currentWorker.SecondName;
@@ -59,8 +61,8 @@ namespace PhotoStudioApp.Views
             {
                 var result = Message.Question("У вас измененные данные. Сохранить их?");
                 if(result == MessageBoxResult.Yes) SaveData();
-                CloseClick?.Invoke(this,e);
             }
+            CloseClick?.Invoke(this, e);
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
@@ -68,26 +70,23 @@ namespace PhotoStudioApp.Views
             if (Validator.IsNotNullOrWhiteSpace(SurnameTextBox.Text, NameTextBox.Text, LastNameBox.Text))
             {
                 SaveData();
-                Message.Success("Успешно!");
                 CloseClick?.Invoke(this, e);
             }
             else MessageBox.Show("У вас есть незаполненные поля!");
         }
 
+        //Сохраняем изменения
         private void SaveData()
         {
             using var context = new MyDBContext();
             RepositoryWorker repositoryWorker = new(context);
 
-            _currentWorker = new()
-            {
-                Name = NameTextBox.Text,
-                UserID = _currentUser.ID,
-                SecondName = SurnameTextBox.Text,
-                LastName = LastNameBox.Text,
-            };
+            _currentWorker.Name = NameTextBox.Text;
+            _currentWorker.SecondName = SurnameTextBox.Text;
+            _currentWorker.LastName = LastNameBox.Text;
 
             repositoryWorker.Update(_currentWorker);
+            Message.Success("Успешно!");
         }
     }
 }
