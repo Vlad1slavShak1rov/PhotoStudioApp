@@ -25,10 +25,13 @@ namespace PhotoStudioApp.Views
     {
         private List<Services> servicesList = new();
         private List<AdditionalService> addServicesList = new();
-        public ListServices()
+        private bool isAdmin;
+        public ListServices(bool isAdmin)
         {
             InitializeComponent();
+            this.isAdmin = isAdmin;
             InitData();
+           
         }
 
         private void InitData()
@@ -48,7 +51,7 @@ namespace PhotoStudioApp.Views
         {
             foreach (var service in servicesList)
             {
-                ServiceCardControl serviceCardControl = new(service);
+                ServiceCardControl serviceCardControl = new(service, isAdmin);
                 serviceCardControl.Margin = new Thickness(0, 5, 0, 0);
                 StackPanelServices.Children.Add(serviceCardControl);
             }
@@ -57,7 +60,7 @@ namespace PhotoStudioApp.Views
         {
             foreach (var addService in addServicesList)
             {
-                ServiceCardControl serviceCardControl = new(addService);
+                ServiceCardControl serviceCardControl = new(addService, isAdmin);
                 serviceCardControl.Margin = new Thickness(0, 5, 0, 0);
                 StackPanelServices.Children.Add(serviceCardControl);
             }
@@ -112,7 +115,7 @@ namespace PhotoStudioApp.Views
             {
                 if (service.ServiceName.ToLower().Contains(searched))
                 {
-                    ServiceCardControl serviceCardControl = new(service);
+                    ServiceCardControl serviceCardControl = new(service, isAdmin);
                     serviceCardControl.Margin = new Thickness(0, 5, 0, 0);
                     StackPanelServices.Children.Add(serviceCardControl);
                 }
@@ -122,7 +125,7 @@ namespace PhotoStudioApp.Views
             {
                 if (addService.ServiceName.ToLower().Contains(searched))
                 {
-                    ServiceCardControl serviceCardControl = new(addService);
+                    ServiceCardControl serviceCardControl = new(addService, isAdmin);
                     serviceCardControl.Margin = new Thickness(0, 5, 0, 0);
                     StackPanelServices.Children.Add(serviceCardControl);
                 }

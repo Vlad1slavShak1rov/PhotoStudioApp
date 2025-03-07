@@ -21,31 +21,37 @@ namespace PhotoStudioApp.Views
     /// </summary>
     public partial class ServiceCardControl : UserControl
     {
-        public ServiceCardControl(Services services)
+        public ServiceCardControl(Services services, bool isAdmin)
         {
             InitializeComponent();
-            InitData(services);
+            InitData(services, isAdmin);
         }
 
-        public ServiceCardControl(AdditionalService additionalService)
+        public ServiceCardControl(AdditionalService additionalService, bool isAdmin)
         {
             InitializeComponent();
-            InitData(additionalService);
+            InitData(additionalService, isAdmin);
         }
 
-        private void InitData(Services services)
+        private void InitData(Services services, bool isAdmin)
         {
             ServiceCardExpander.Header = services.ServiceName;
             DescriptionLabel.Text = services.Description;
             CostLabel.Content = "Стоимость: " + services.CostService;
             TypeOfServiceLabel.Content = "Тип услуги: Основная";
+
+            //Проверка, администратор ли сейчас пользуется или нет
+            AdminButtons.Visibility = isAdmin ? Visibility.Visible : Visibility.Collapsed;
         }
-        private void InitData(AdditionalService services)
+        private void InitData(AdditionalService services, bool isAdmin)
         {
             ServiceCardExpander.Header = services.ServiceName;
             DescriptionLabel.Text = services.Description;
             CostLabel.Content = "Стоимость: " + services.Cost;
             TypeOfServiceLabel.Content = "Тип услуги: Дополнительная";
+
+            //Проверка, администратор ли сейчас пользуется или нет
+            AdminButtons.Visibility = isAdmin ? Visibility.Visible : Visibility.Collapsed;
         }
     }
 }

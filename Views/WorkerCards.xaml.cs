@@ -54,9 +54,7 @@ namespace PhotoStudioApp.Views
             var bookingList = (Enums.Post)_currentWorker.Post == Enums.Post.Photograph ?
                 repositoryBooking.GetAllByPhotograph(_currentWorker.ID) : repositoryBooking.GetAllByVisagiste(_currentWorker.ID);
 
-            // Устанавливаем ItemsSource для ComboBox
             AllBookingCB.ItemsSource = bookingList;
-
             // Указываем путь к отображаемому свойству
             AllBookingCB.DisplayMemberPath = "GetNameBooking";
         }

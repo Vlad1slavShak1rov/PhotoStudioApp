@@ -64,7 +64,7 @@ namespace PhotoStudioApp.Views
 
         private void LoadChildren(List<Worker> workerList)
         {
-            MainPanel.Children.Clear();
+            if(MainPanel != null) MainPanel.Children.Clear();
             if (workerList != null)
             {
                 foreach (var worker in workerList)

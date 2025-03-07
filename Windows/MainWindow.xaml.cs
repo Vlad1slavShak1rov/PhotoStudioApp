@@ -73,7 +73,7 @@ namespace PhotoStudioApp.Windows
         private void ListServicesButton_Click(object sender, RoutedEventArgs e)
         {
             MainGrid.Children.Clear();
-            ListServices ListServices = new();
+            ListServices ListServices = new(false);
             MainGrid.Children.Add(ListServices);
         }
 
@@ -124,6 +124,13 @@ namespace PhotoStudioApp.Windows
             AdminMainPanel.Children.Clear();
             WorkerListView workerListView = new();
             AdminMainPanel.Children.Add(workerListView);
+        }
+
+        private void AllServiceButton_Click(object sender, RoutedEventArgs e)
+        {
+            AdminMainPanel.Children.Clear();
+            ListServices ListServices = new(true);
+            AdminMainPanel.Children.Add(ListServices);
         }
     }
 }

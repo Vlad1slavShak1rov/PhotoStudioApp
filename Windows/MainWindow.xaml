@@ -160,7 +160,7 @@
                     </StackPanel>
 
                     <StackPanel Margin="300 0 0 0" HorizontalAlignment="Left">
-                        <Button Name="AllServiceButton" HorizontalAlignment="Center" Height="36" Width="39" Margin="0 9 0 0" BorderBrush="{x:Null}" Style="{StaticResource ButtonOpacity}" Click="ListServicesButton_Click" >
+                        <Button Name="AllServiceButton" HorizontalAlignment="Center" Height="36" Width="39" Margin="0 9 0 0" BorderBrush="{x:Null}" Style="{StaticResource ButtonOpacity}" Click="AllServiceButton_Click" >
                             <Button.Background>
                                 <ImageBrush ImageSource="pack://application:,,,/Resources/Pictures/cameraIco.png"/>
                             </Button.Background>

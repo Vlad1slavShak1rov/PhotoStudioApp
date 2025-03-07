@@ -15,11 +15,16 @@
     </UserControl.Resources>
     <Expander Name="ServiceCardExpander" Background="White" Header="Услуга:услуга" FontSize="20" FontWeight="Bold" Foreground="{StaticResource Text}">
         <Expander.Content>
-            <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Vertical" VerticalAlignment="Stretch">
                 <Label  Content="Описание:" FontSize="16" FontWeight="Bold" />
                 <TextBlock Name="DescriptionLabel" Margin="6 0 0 0" TextWrapping="Wrap" Text="тут какой-то текст" FontSize="16" FontWeight="Bold" Foreground="{StaticResource Text}"/>
                 <Label Name="TypeOfServiceLabel" Content="Тип услуги: " FontSize="14" FontWeight="Bold" Foreground="{StaticResource Text}"/>
                 <Label Name="CostLabel" Content="Стоимость: " FontSize="14" FontWeight="Bold" Foreground="{StaticResource Text}"/>
+
+                <StackPanel Name="AdminButtons" Orientation="Horizontal" Margin="0 20 0 0" Visibility="Collapsed">
+                    <Button Name="AddButton" Content="Добавить" Background="{StaticResource Panel}" FontSize="14" Margin="0 0 10 0"/>
+                    <Button Name="DeleteButton" Content="Удалить" Background="{StaticResource Panel}" FontSize="14"/>
+                </StackPanel>
             </StackPanel>
         </Expander.Content>
     </Expander>
