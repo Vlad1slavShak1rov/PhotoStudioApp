@@ -1,0 +1,74 @@
+﻿<Window x:Class="PhotoStudioApp.Windows.RegistrationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PhotoStudioApp.Windows"
+        mc:Ignorable="d"
+        Title="Регистрация" Height="450" Width="800" MinHeight="450" MinWidth="800" WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/ThemeColor.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Style x:Key="TextBlockStyle" TargetType="TextBlock">
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="FontWeight" Value="UltraBold"/>
+                <Setter Property="Foreground" Value="{StaticResource Panel}"/>
+            </Style>
+            <Style x:Key="ButtonStyle" TargetType="Button">
+                <Setter Property="Foreground" Value="{StaticResource Text}"/>
+                <Setter Property="Background" Value="{StaticResource ButtonColor}"/>
+                <Setter Property="Width" Value="150"/>
+                <Setter Property="Margin" Value="0 5 0 0"/>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid Background="{StaticResource BackgroundColor}">
+        <StackPanel VerticalAlignment="Center">
+            <Label Content="Фотостудия" HorizontalAlignment="Center" FontSize="32" Foreground="{StaticResource Panel}" FontWeight="SemiBold"/>
+            <Border HorizontalAlignment="Center" VerticalAlignment="Center" Height="250" Width="450" CornerRadius="5">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" Margin="0 0 40 0">
+                        <TextBlock Text="Имя" HorizontalAlignment="Center"  Style="{StaticResource TextBlockStyle}"/>
+                        <TextBox Name="NameBox" Width="170"/>
+
+                        <TextBlock Text="Фамилия" HorizontalAlignment="Center"  Style="{StaticResource TextBlockStyle}"/>
+                        <TextBox Name="SecondName" Width="170"/>
+
+                        <TextBlock Text="Отчество" HorizontalAlignment="Center"  Style="{StaticResource TextBlockStyle}"/>
+                        <TextBox Name="LastName" Width="170"/>
+
+                        <TextBlock Text="Контакты" HorizontalAlignment="Center"  Style="{StaticResource TextBlockStyle}"/>
+                        <TextBox Name="ContactBox" Width="170"/>
+                        
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1">
+                        <TextBlock Text="Логин" HorizontalAlignment="Center" Style="{StaticResource TextBlockStyle}"/>
+                        <TextBox Name="LoginBox" Width="170"/>
+
+                        <TextBlock Text="Пароль" HorizontalAlignment="Center" Style="{StaticResource TextBlockStyle}"/>
+                        <PasswordBox Name="PasswordBoxOne" Width="170"/>
+
+                        <TextBlock Text="Повторный пароль" HorizontalAlignment="Center" Style="{StaticResource TextBlockStyle}"/>
+                        <PasswordBox Name="PasswordBoxTwo" Width="170"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.ColumnSpan="2" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="149,188,0,0">
+                        <Button Name="SingUpButton" Content="Зарегистрироваться" Style="{StaticResource ButtonStyle}" Height="20" Click="SingUpButton_Click"/>
+                        <Button Name="SignUpButton" Content="Уже есть аккаунт!" Style="{StaticResource ButtonStyle}"  Height="20" Click="SignUpButton_Click"/>
+
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,93 @@
+﻿<UserControl x:Class="PhotoStudioApp.Views.CreateBooking"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PhotoStudioApp.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/ThemeColor.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style x:Key="ButtonStyle" TargetType="Button">
+                <Setter Property="Foreground" Value="{DynamicResource Text}"/>
+                <Setter Property="Background" Value="{DynamicResource ButtonColor}"/>
+                <Setter Property="Width" Value="150"/>
+                <Setter Property="Margin" Value="0 5 0 0"/>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+
+        <Border Background="{DynamicResource Panel}" Opacity="0.4" Grid.Column="0"/>
+        <Border Background="{DynamicResource Panel}" Opacity="0.4" Grid.Column="1"/>
+        
+        <!--Левая часть-->
+        <StackPanel Grid.Column="0" HorizontalAlignment="Center">
+            <TextBlock Text="Бронирование" FontSize="22" Foreground="{StaticResource BackgroundColor}" HorizontalAlignment="Center" FontWeight="Bold"/>
+
+            <StackPanel Margin="5">
+                <TextBlock Text="Услуга" FontSize="22" Foreground="{DynamicResource BackgroundColor}" HorizontalAlignment="Center" FontWeight="Bold"/>
+                <ComboBox Name="ServicesComboBox" Width="250" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource add}" Background="{DynamicResource add}" SelectedIndex="0">
+                    <ComboBoxItem Content="Не выбран"/>
+                </ComboBox>
+            </StackPanel>
+
+            <StackPanel  Margin="5">
+                <TextBlock Text="Зал" FontSize="22" Foreground="{DynamicResource BackgroundColor}" HorizontalAlignment="Center" FontWeight="Bold"/>
+                <ComboBox Name="HallComboBox" Width="250" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource add}" Background="{DynamicResource add}" SelectedIndex="0">
+                    <ComboBoxItem Content="Не выбран"/>
+                </ComboBox>
+            </StackPanel>
+            
+            <StackPanel Margin="5">
+                <TextBlock Text="Фотограф" FontSize="22" Foreground="{DynamicResource BackgroundColor}" HorizontalAlignment="Center" FontWeight="Bold"/>
+                <ComboBox Name="WorkerCombobox" Width="250" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource add}" Background="{DynamicResource add}" SelectedIndex="0">  
+                    <ComboBoxItem Content="Не выбран"/>
+                </ComboBox>
+            </StackPanel>
+
+            <StackPanel  Margin="5">
+                <TextBlock Text="Визажист" FontSize="22" Foreground="{DynamicResource BackgroundColor}" HorizontalAlignment="Center" FontWeight="Bold"/>
+                <ComboBox Name="VisagisteCombobox" Width="250" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource add}" Background="{DynamicResource add}" SelectedIndex="0">
+                    <ComboBoxItem Content="Без визажиста"/>
+                </ComboBox>
+            </StackPanel>
+
+            <StackPanel  Margin="5">
+                <TextBlock Text="Доп.Услуга" FontSize="22" Foreground="{DynamicResource BackgroundColor}" HorizontalAlignment="Center" FontWeight="Bold"/>
+                <ComboBox Name="AdditionalServicesCombobox" Width="250" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource add}" Background="{DynamicResource add}" SelectedIndex="0">
+                    <ComboBoxItem Content="Без услуги"/>
+                </ComboBox>
+            </StackPanel>
+
+            <StackPanel  Margin="5">
+                <TextBlock Text="Дата бронирования" FontSize="22" Foreground="{DynamicResource BackgroundColor}" HorizontalAlignment="Center" FontWeight="Bold"/>
+                <TextBox Name="DateBookingBox" Width="250"  FontSize="18" FontWeight="Bold" Foreground="{DynamicResource Text}" Height="30"/>
+            </StackPanel>
+        </StackPanel>
+
+        <!--Правая часть-->
+        <StackPanel Grid.Column="1">
+            <TextBlock Text="Оплата" FontSize="22" Foreground="{DynamicResource BackgroundColor}" HorizontalAlignment="Center" FontWeight="Bold"/>
+            <StackPanel  Margin="5">
+                <TextBlock Text="Способ оплаты" FontSize="22" FontWeight="Bold" Foreground="{DynamicResource BackgroundColor}" HorizontalAlignment="Center" />
+                <ComboBox Name="PaymentMethodBox" Width="250"  FontSize="16" FontWeight="Bold" Foreground="{DynamicResource add}" Background="{DynamicResource add}" SelectedIndex="0">
+                    <ComboBoxItem Content="Наличными"/>
+                    <ComboBoxItem Content="Безналичными"/>
+                </ComboBox>
+                <TextBlock Name="AmountBlock" Text="Итого: 0.0р" Margin="0 100 0 0" FontSize="30" Foreground="{DynamicResource BackgroundColor}" HorizontalAlignment="Left" FontWeight="Bold"/>
+                <Button Name="PayButton" Content="Оплатить"  Style="{StaticResource ButtonStyle}" Height="30" Click="PayButton_Click"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

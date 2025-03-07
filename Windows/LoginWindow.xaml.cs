@@ -1,0 +1,96 @@
+﻿using PhotoStudioApp.Database.DAL;
+using PhotoStudioApp.Database.DBContext;
+using PhotoStudioApp.Helper;
+using PhotoStudioApp.Model;
+using PhotoStudioApp.Windows;
+using System.Text;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+namespace PhotoStudioApp;
+
+/// <summary>
+/// Interaction logic for MainWindow.xaml
+/// </summary>
+public partial class LoginWindow : Window
+{
+    public LoginWindow()
+    {
+        InitializeComponent();
+    }
+
+    private void SignUpButton_Click(object sender, RoutedEventArgs e)
+    {
+        RegistrationWindow registrationWindow = new();
+        registrationWindow.Show();
+        this.Close();
+    }
+
+    private void SingInButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (!string.IsNullOrEmpty(LoginBox.Text) && !string.IsNullOrEmpty(PasswordBox.Password))
+        {
+            string login = LoginBox.Text;
+            string password = PasswordBox.Password;
+
+            using var context = new MyDBContext(); 
+            RepositoryUser repositoryUser = new(context); 
+
+            var user = repositoryUser.GetByLogin(login);
+            if(user != null)
+            {
+                if(user.Password == password)
+                {
+                    //Проверка, если роль пользователя равна роли рабочего
+                    if ((Enums.Role)user.Role == Enums.Role.Worker)
+                    {
+                        RepositoryCustomer repositoryCustomer = new(context);
+                        RepositoryWorker repositoryWorker = new(context);
+
+                        var customer = repositoryCustomer.GetByUserID(user.ID);
+                        if(customer != null)
+                        {
+                            Worker worker = repositoryWorker.GetByUserID(user.ID);// проверяем зарегистрирован ли рабочий с таким ID
+
+                            if(worker == null) //Если не зарегистрирован
+                            {
+                                worker = new()
+                                {
+                                    Name = customer.Name,
+                                    LastName = customer.LastName,
+                                    SecondName = customer.SecondName,
+                                    Post = Enums.Post.Photograph, //Роль рабочего можно поменять в бд
+                                    User = user,
+                                };
+                                repositoryWorker.Create(worker);
+                                repositoryCustomer.Delete(customer.ID);
+                            }
+                        }
+                    }
+                    Message.Success("Успешно!");
+                    MainWindow mainWindow = new(user);
+                    mainWindow.Show();
+                    this.Close();
+                }
+                else
+                {
+                    Message.Warning("Неверный пароль");
+                    return;
+                }
+            }
+            else
+            {
+                Message.Warning("Такого пользователя не существует!");
+                return;
+            }
+        }
+        else Message.Warning("У вас есть незаполненные поля!");
+    }
+}

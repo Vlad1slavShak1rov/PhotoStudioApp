@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\Pictures\cameraIco.png" />
+    <None Remove="Resources\Pictures\createBooking.png" />
+    <None Remove="Resources\Pictures\extIco.png" />
+    <None Remove="Resources\Pictures\myOrderIco.png" />
+    <None Remove="Resources\Pictures\settings.png" />
+    <None Remove="Resources\Pictures\viewsIco.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Pictures\cameraIco.png" />
+    <Resource Include="Resources\Pictures\extIco.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Pictures\createBooking.png" />
+    <Resource Include="Resources\Pictures\myOrderIco.png" />
+    <Resource Include="Resources\Pictures\settings.png" />
+    <Resource Include="Resources\Pictures\viewsIco.png" />
+  </ItemGroup>
+
+</Project>

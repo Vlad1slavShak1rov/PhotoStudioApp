@@ -1,0 +1,46 @@
+﻿<UserControl x:Class="PhotoStudioApp.Views.SubmitView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PhotoStudioApp.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="400">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/ThemeColor.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid Background="{StaticResource Text}">
+        <StackPanel>
+            <Label Content="Мой отзыв" HorizontalAlignment="Center" FontSize="24" FontWeight="Bold" Foreground="{StaticResource add}"/>
+
+            <StackPanel>
+                <Label Content = "Выберите вашу услугу" FontSize="16" FontWeight="Bold" Foreground="{StaticResource add}"/>
+                <ComboBox Name="MyServiceBox" Width="200" HorizontalAlignment="Left"/>
+            </StackPanel>
+            <StackPanel>
+                <Label Content="Ваша оценка" FontSize="16" FontWeight="Bold" Foreground="{StaticResource add}"/>
+                <StackPanel Orientation="Horizontal">
+                    <RadioButton Name="Rate0" Content="1" Margin="0 0 10 0" Checked="Rate_Checked"/>
+                    <RadioButton Name="Rate1" Content="2" Margin="0 0 10 0" Checked="Rate_Checked"/>
+                    <RadioButton Name="Rate2" Content="3" Margin="0 0 10 0" Checked="Rate_Checked"/>
+                    <RadioButton Name="Rate3" Content="4" Margin="0 0 10 0" Checked="Rate_Checked"/>
+                    <RadioButton Name="Rate4" Content="5" Margin="0 0 10 0" IsChecked="True" Checked="Rate_Checked"/>
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel>
+                <Label Content = "Теперь, расскажите что вам понравилось" FontSize="16" FontWeight="Bold" Foreground="{StaticResource add}"/>
+                <TextBox Name="ReviewTextBox" Height="200" Margin="10 0 10 0"/>
+            </StackPanel>
+            <Grid>
+                <Button Name="ExitButton" Content="Закрыть" HorizontalAlignment="Left" Margin="10" Width="120" Height="30" Click="ExitButton_Click"/>
+                <Button Name="SubmiteButton" Content="Отправить" HorizontalAlignment="Right" Margin="10" Width="120" Height="30" Click="SubmiteButton_Click"/>
+            </Grid>
+        </StackPanel>
+    </Grid>
+</UserControl>
