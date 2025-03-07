@@ -118,5 +118,12 @@ namespace PhotoStudioApp.Windows
             MyBooking myBooking = new(_user);
             AdminMainPanel.Children.Add(myBooking);
         }
+
+        private void AllWorkerButton_Click(object sender, RoutedEventArgs e)
+        {
+            AdminMainPanel.Children.Clear();
+            WorkerListView workerListView = new();
+            AdminMainPanel.Children.Add(workerListView);
+        }
     }
 }

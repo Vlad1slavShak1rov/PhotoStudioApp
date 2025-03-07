@@ -63,7 +63,7 @@ namespace PhotoStudioApp.Views
             MyServiceBox.SelectedIndex = 0;
         }
 
-        //Нажаитие на кнопку Отправить
+        //Нажатие на кнопку Отправить
         //Сохранение отзыва в БД
         private void SubmiteButton_Click(object sender, RoutedEventArgs e)
         {
