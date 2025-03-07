@@ -22,6 +22,8 @@ namespace PhotoStudioApp.Windows
     public partial class MainWindow : Window
     {
         private User _user;
+        private SettingsView settingsView;
+        private CreateBooking createBooking;
         public MainWindow(User user)
         {
             InitializeComponent();
@@ -42,7 +44,7 @@ namespace PhotoStudioApp.Windows
         private void CreateOrderButton_Click(object sender, RoutedEventArgs e)
         {
             MainGrid.Children.Clear();
-            CreateBooking createBooking = new(_user);
+            createBooking = new(_user);
             createBooking.CloseButton += CreateBooking_CloseButton;
 
             createBooking.VerticalAlignment = VerticalAlignment.Top;
@@ -53,8 +55,15 @@ namespace PhotoStudioApp.Windows
 
             MainGrid.Children.Add(createBooking);
         }
-        private void CreateBooking_CloseButton(object? sender, EventArgs e) => MainGrid.Children.Clear();
 
+        //Освобождаем память
+        private void CreateBooking_CloseButton(object? sender, EventArgs e)
+        {
+            createBooking.CloseButton -= CreateBooking_CloseButton;
+            createBooking = null;
+
+            MainGrid.Children.Clear();
+        }
         private void ListBookingButton_Click(object sender, RoutedEventArgs e)
         {
             MainGrid.Children.Clear();
@@ -86,9 +95,22 @@ namespace PhotoStudioApp.Windows
         private void SettingsButton_Click(object sender, RoutedEventArgs e)
         {
             WorkerMainPanel.Children.Clear();
-            SettingsView settingsView = new(_user);
+            settingsView = new(_user);
             settingsView.HorizontalAlignment = HorizontalAlignment.Center;
             settingsView.VerticalAlignment = VerticalAlignment.Center;
+            settingsView.Width = 350;
+            settingsView.Height = 350;
+            settingsView.Margin = new Thickness(0,10,0,0);
+            settingsView.CloseClick += SettingsView_CloseClick;
+            WorkerMainPanel.Children.Add(settingsView);
+        }
+
+        //Освобождаем память
+        private void SettingsView_CloseClick(object? sender, EventArgs e)
+        {
+            settingsView.CloseClick -= SettingsView_CloseClick;
+            settingsView = null;
+            WorkerMainPanel.Children.Clear();
         }
     }
 }

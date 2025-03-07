@@ -26,21 +26,22 @@ namespace PhotoStudioApp.Views
     {
         public event EventHandler CloseClick;
         private Worker _currentWorker;
-
+        private User _currentUser;
 
         public SettingsView(User user)
         {
             InitializeComponent();
-            GetWorker(user);
+            _currentUser = user;
+            GetWorker();
             InitData();
 
         }
 
-        private void GetWorker(User user)
+        private void GetWorker()
         {
             using var context = new MyDBContext();
             RepositoryWorker repositoryWorker = new(context);
-            var worker = repositoryWorker.GetByID(user.ID);
+            _currentWorker = repositoryWorker.GetByUserID(_currentUser.ID);
         }
 
         private void InitData()
@@ -81,6 +82,7 @@ namespace PhotoStudioApp.Views
             _currentWorker = new()
             {
                 Name = NameTextBox.Text,
+                UserID = _currentUser.ID,
                 SecondName = SurnameTextBox.Text,
                 LastName = LastNameBox.Text,
             };
