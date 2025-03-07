@@ -33,51 +33,53 @@
     </Window.Resources>
     <Grid Background="{StaticResource BackgroundColor}" >
         <!--Грид для клиента-->
-        <Grid x:Name="CustomerGrid" Visibility="Collapsed">
+        <Grid x:Name="CustomerGrid" Visibility="Visible">
             <Grid.RowDefinitions>
                 <RowDefinition Height="70"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="0" Background="{StaticResource Panel}" HorizontalAlignment="Stretch">
-                <StackPanel Margin="0 0 750 0" HorizontalAlignment="Center">
-                    <Button Name="CreateOrderButton" Height="60" Width="60" Margin="0 -1 0 -15" BorderBrush="{x:Null}" Style="{StaticResource ButtonOpacity}" Click="CreateOrderButton_Click">
-                        <Button.Background>
-                            <ImageBrush ImageSource="pack://application:,,,/Resources/Pictures/createBooking.png"/>
-                        </Button.Background>
-                    </Button>
-                    <TextBlock Text="Забронировать" Foreground="{StaticResource Text}" FontSize="14" FontWeight="DemiBold"/>
-                </StackPanel>
+                <Grid HorizontalAlignment="Center" Margin="150 0 0 0">
+                    <StackPanel Margin="0 0 450 0" HorizontalAlignment="Center">
+                        <Button Name="CreateOrderButton" Height="60" Width="60" Margin="0 -1 0 -15" BorderBrush="{x:Null}" Style="{StaticResource ButtonOpacity}" Click="CreateOrderButton_Click">
+                            <Button.Background>
+                                <ImageBrush ImageSource="pack://application:,,,/Resources/Pictures/createBooking.png"/>
+                            </Button.Background>
+                        </Button>
+                        <TextBlock Text="Забронировать" Foreground="{StaticResource Text}" FontSize="14" FontWeight="DemiBold"/>
+                    </StackPanel>
 
-                <StackPanel Margin="0 0 350 0" HorizontalAlignment="Center">
-                    <Button Name="ListBookingButton" HorizontalAlignment="Center" Height="36" Width="39" Margin="0 9 0 0" BorderBrush="{x:Null}" Style="{StaticResource ButtonOpacity}" Click="ListBookingButton_Click" >
-                        <Button.Background>
-                            <ImageBrush ImageSource="/Resources/Pictures/myOrderIco.png"/>
-                        </Button.Background>
-                    </Button>
-                    <TextBlock Text="Мои бронировния" HorizontalAlignment="Center" Foreground="{StaticResource Text}" FontSize="14" FontWeight="DemiBold"/>
-                </StackPanel>
+                    <StackPanel Margin="0 0 200 0" HorizontalAlignment="Center">
+                        <Button Name="ListBookingButton" HorizontalAlignment="Center" Height="36" Width="39" Margin="0 9 0 0" BorderBrush="{x:Null}" Style="{StaticResource ButtonOpacity}" Click="ListBookingButton_Click" >
+                            <Button.Background>
+                                <ImageBrush ImageSource="/Resources/Pictures/myOrderIco.png"/>
+                            </Button.Background>
+                        </Button>
+                        <TextBlock Text="Мои бронировния" HorizontalAlignment="Center" Foreground="{StaticResource Text}" FontSize="14" FontWeight="DemiBold"/>
+                    </StackPanel>
 
-                <StackPanel Margin="0 0 0 0" HorizontalAlignment="Center">
-                    <Button Name="ListServicesButton" HorizontalAlignment="Center" Height="36" Width="39" Margin="0 9 0 0" BorderBrush="{x:Null}" Style="{StaticResource ButtonOpacity}" Click="ListServicesButton_Click" >
-                        <Button.Background>
-                            <ImageBrush ImageSource="pack://application:,,,/Resources/Pictures/cameraIco.png"/>
-                        </Button.Background>
-                    </Button>
-                    <TextBlock Text="Список услуг" HorizontalAlignment="Center" Foreground="{StaticResource Text}" FontSize="14" FontWeight="DemiBold"/>
-                </StackPanel>
+                    <StackPanel Margin="30 0 0 0" HorizontalAlignment="Center">
+                        <Button Name="ListServicesButton" HorizontalAlignment="Center" Height="36" Width="39" Margin="0 9 0 0" BorderBrush="{x:Null}" Style="{StaticResource ButtonOpacity}" Click="ListServicesButton_Click" >
+                            <Button.Background>
+                                <ImageBrush ImageSource="pack://application:,,,/Resources/Pictures/cameraIco.png"/>
+                            </Button.Background>
+                        </Button>
+                        <TextBlock Text="Список услуг" HorizontalAlignment="Center" Foreground="{StaticResource Text}" FontSize="14" FontWeight="DemiBold"/>
+                    </StackPanel>
 
 
-                <StackPanel Margin="370 0 0 0" HorizontalAlignment="Center">
-                    <Button Name="ReviewButton" HorizontalAlignment="Center" Height="36" Width="39" Margin="0 9 0 0" BorderBrush="{x:Null}" Style="{StaticResource ButtonOpacity}" Click="ReviewButton_Click" >
-                        <Button.Background>
-                            <ImageBrush ImageSource="/Resources/Pictures/viewsIco.png"/>
-                        </Button.Background>
-                    </Button>
-                    <TextBlock Text="Отзывы" HorizontalAlignment="Center" Foreground="{StaticResource Text}" FontSize="14" FontWeight="DemiBold"/>
-                </StackPanel>
+                    <StackPanel Margin="200 0 0 0" HorizontalAlignment="Center">
+                        <Button Name="ReviewButton" HorizontalAlignment="Center" Height="36" Width="39" Margin="0 9 0 0" BorderBrush="{x:Null}" Style="{StaticResource ButtonOpacity}" Click="ReviewButton_Click" >
+                            <Button.Background>
+                                <ImageBrush ImageSource="/Resources/Pictures/viewsIco.png"/>
+                            </Button.Background>
+                        </Button>
+                        <TextBlock Text="Отзывы" HorizontalAlignment="Center" Foreground="{StaticResource Text}" FontSize="14" FontWeight="DemiBold"/>
+                    </StackPanel>
+                </Grid>
 
-                <StackPanel Margin="650 0 0 0" HorizontalAlignment="Center">
+                <StackPanel Margin="0 0 0 0" HorizontalAlignment="Right">
                     <Button x:Name="ExitButton" HorizontalAlignment="Right" Height="60" Width="60" Margin="0 -4 0 -11" Click="ExitButton_Click" BorderBrush="{x:Null}" Style="{StaticResource ButtonOpacity}">
                         <Button.Background>
                             <ImageBrush ImageSource="/Resources/Pictures/extIco.png"/>
@@ -85,14 +87,14 @@
                     </Button>
                     <TextBlock Text="Выход" HorizontalAlignment="Center" Foreground="{StaticResource Text}" FontSize="14" FontWeight="DemiBold"/>
                 </StackPanel>
-                
+
             </Grid>
             <Grid Name="MainGrid" Grid.Row="1">
             </Grid>
         </Grid>
 
         <!--Грид для работника-->
-        <Grid x:Name="WorkerGrid" Visibility="Hidden">
+        <Grid x:Name="WorkerGrid" Visibility="Collapsed">
             <Grid.RowDefinitions>
                 <RowDefinition Height="70"/>
                 <RowDefinition Height="*"/>
@@ -127,13 +129,56 @@
                     </StackPanel>
                 </Grid>
             </Grid>
-            
+
             <Grid x:Name="WorkerMainPanel" Grid.Row="1"/>
         </Grid>
 
         <!--Грид для Сисадмина-->
         <Grid x:Name="AdminGrid" Visibility="Collapsed">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="70"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" Background="{StaticResource Panel}" HorizontalAlignment="Stretch">
+                <Grid HorizontalAlignment="Center">
+                    <StackPanel Margin="0 0 300 0" HorizontalAlignment="Left">
+                        <Button Name="AllBooking" Height="36" Width="39" Margin="0 9 0 0" BorderBrush="{x:Null}" Style="{StaticResource ButtonOpacity}" Click="ListBookingButton_Click" >
+                            <Button.Background>
+                                <ImageBrush ImageSource="/Resources/Pictures/myOrderIco.png"/>
+                            </Button.Background>
+                        </Button>
+                        <TextBlock Text="Все бронирования" HorizontalAlignment="Center" Foreground="{StaticResource Text}" FontSize="14" FontWeight="DemiBold"/>
+                    </StackPanel>
 
+                    <StackPanel Margin="0 0 0 0">
+                        <Button Name="AllWorkerButton"  Height="36" Width="39" Margin="0 9 0 0" BorderBrush="{x:Null}" Style="{StaticResource ButtonOpacity}" Click="ListBookingButton_Click" >
+                            <Button.Background>
+                                <ImageBrush ImageSource="/Resources/Pictures/workerIco.png"/>
+                            </Button.Background>
+                        </Button>
+                        <TextBlock Text="Сотрудники" HorizontalAlignment="Center" Foreground="{StaticResource Text}" FontSize="14" FontWeight="DemiBold"/>
+                    </StackPanel>
+
+                    <StackPanel Margin="300 0 0 0" HorizontalAlignment="Left">
+                        <Button Name="AllServiceButton" HorizontalAlignment="Center" Height="36" Width="39" Margin="0 9 0 0" BorderBrush="{x:Null}" Style="{StaticResource ButtonOpacity}" Click="ListServicesButton_Click" >
+                            <Button.Background>
+                                <ImageBrush ImageSource="pack://application:,,,/Resources/Pictures/cameraIco.png"/>
+                            </Button.Background>
+                        </Button>
+                        <TextBlock Text="Список услуг" HorizontalAlignment="Center" Foreground="{StaticResource Text}" FontSize="14" FontWeight="DemiBold"/>
+                    </StackPanel>
+                </Grid>
+                <StackPanel Margin="0 0 0 0" HorizontalAlignment="Right">
+                    <Button x:Name="ExitButtonAdm" HorizontalAlignment="Right" Height="60" Width="60" Margin="0 -4 0 -11" Click="ExitButton_Click" BorderBrush="{x:Null}" Style="{StaticResource ButtonOpacity}">
+                        <Button.Background>
+                            <ImageBrush ImageSource="/Resources/Pictures/extIco.png"/>
+                        </Button.Background>
+                    </Button>
+                    <TextBlock Text="Выход" HorizontalAlignment="Center" Foreground="{StaticResource Text}" FontSize="14" FontWeight="DemiBold"/>
+                </StackPanel>
+            </Grid>
+
+            <Grid Name="AdminMainPanel"/>
         </Grid>
     </Grid>
 </Window>
