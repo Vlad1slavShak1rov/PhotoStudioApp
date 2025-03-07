@@ -15,14 +15,22 @@
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="55"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
 
         <Grid Grid.Row="0" Background="{StaticResource Text}" >
             <TextBlock Text="Список сотрудников" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" FontWeight="ExtraBlack" Foreground="{StaticResource add}"/>
-            <Button Name="AddWorker" Content="Добавить рабочего" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{StaticResource Text}" Background="{StaticResource ButtonColor}" Margin="10" Click="AddWorker_Click"/>
+            <Button Name="AddWorker" Content="Добавить рабочего" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{StaticResource Text}" Background="{StaticResource ButtonColor}" Margin="10 0 0 0" Click="AddWorker_Click" Height="30"/>
+            <StackPanel HorizontalAlignment="Right">
+                <Label Content="Фильтрация"/>
+                <ComboBox Name="FilteredComboBox"  Width="200" Height="25" Margin="0 0 20 0" SelectedIndex="0" SelectionChanged="FilteredComboBox_SelectionChanged">
+                    <ComboBoxItem Content="Не фильтровать"/>
+                    <ComboBoxItem Content="Фотографы"/>
+                    <ComboBoxItem Content="Визажисты"/>
+                </ComboBox>
+            </StackPanel>
         </Grid>
         <Grid x:Name="MainGrid" Grid.Row="1">
             <ScrollViewer Name="MainScrollViewer">

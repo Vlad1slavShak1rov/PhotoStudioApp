@@ -26,6 +26,7 @@ namespace PhotoStudioApp.Views
     /// </summary>
     public partial class AddWorkerView : UserControl
     {
+        //Событие закрытие окна
         public event EventHandler Close;
         public AddWorkerView()
         {
