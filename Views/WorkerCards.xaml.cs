@@ -1,5 +1,6 @@
 ﻿using PhotoStudioApp.Database.DAL;
 using PhotoStudioApp.Database.DBContext;
+using PhotoStudioApp.Helper;
 using PhotoStudioApp.Model;
 using System;
 using System.Collections.Generic;
@@ -84,6 +85,27 @@ namespace PhotoStudioApp.Views
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
+            using var context = new MyDBContext();
+            RepositoryBooking repositoryBooking = new(context);
+            RepositoryWorker repositoryWorker = new(context);
+            RepositoryUser repositoryUser = new(context);
+
+            //Получаем бронирование в зависисомсти от роли сотрудника
+            var booking = _currentWorker.Post == Enums.Post.Photograph ? repositoryBooking.GetByPhotographID(_currentWorker.ID) : repositoryBooking.GetByVisagisteID(_currentWorker.ID);
+
+            //Если работник не закреплен за бронью
+            if (booking == null)
+            {
+                var result = Message.Question("Вы уверены, что хотите удалить сотрудника?");
+                if(result == MessageBoxResult.Yes)
+                {
+                    repositoryWorker.Delete(_currentWorker.ID);
+                    repositoryUser.Delete(_currentWorker.UserID);
+                    Message.Success("Успешно!");
+                    Update?.Invoke(this,e);
+                }
+            }
+            else Message.Warning("Невозможно удалить сотрудника, т.к. он закреплен на бронью");
 
         }
     }
