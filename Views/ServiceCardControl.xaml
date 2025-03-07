@@ -23,7 +23,6 @@
 
                 <StackPanel Name="AdminButtons" Orientation="Horizontal" Margin="0 20 0 0" Visibility="Collapsed">
                     <Button Name="EditButton" Content="Изменить" Background="{StaticResource Panel}" FontSize="14" Margin="0 0 10 0" Click="EditButton_Click"/>
-                    <Button Name="DeleteButton" Content="Удалить" Background="{StaticResource Panel}" FontSize="14" Click="DeleteButton_Click"/>
                 </StackPanel>
             </StackPanel>
         </Expander.Content>

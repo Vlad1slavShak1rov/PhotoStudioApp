@@ -1,5 +1,6 @@
 ﻿using PhotoStudioApp.Database.DAL;
 using PhotoStudioApp.Database.DBContext;
+using PhotoStudioApp.Helper;
 using PhotoStudioApp.Model;
 using System;
 using System.Collections.Generic;
@@ -67,22 +68,20 @@ namespace PhotoStudioApp.Views
             RepositoryServices repositoryServices = new(context);
 
             var service = repositoryServices.GetByName(ServiceCardExpander.Header.ToString());
-            if(service != null)
+
+            if(service != null)   //Если загружена основная услуга
             {
                 EditService(service);
             }
-            else
+            else //Загружаем дополнительную услугу
             {
                 var addService = repositoryAdditionalService.GetByName(ServiceCardExpander.Header.ToString());
                 EditService(addService);
             }
         }
 
-        private void DeleteButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
+        //Создаем окно редактирования
+        //Для основной услуги
         private void EditService(Services services)
         {
             editServiceView = new(services);
@@ -95,6 +94,8 @@ namespace PhotoStudioApp.Views
             _mainGrid.Children.Add(editServiceView);
         }
 
+        //Создаем окно редактирования
+        //Для дополнительной услуги
         private void EditService(AdditionalService services)
         {
             editServiceView = new(services);
@@ -107,6 +108,7 @@ namespace PhotoStudioApp.Views
             _mainGrid.Children.Add(editServiceView);
         }
 
+        //Обработчик события, когда окно редактированя закрывается
         private void EditServiceView_Close(object? sender, EventArgs e)
         {
             _mainGrid.Children.Remove(editServiceView);

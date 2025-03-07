@@ -22,6 +22,8 @@ namespace PhotoStudioApp.Database.DAL
         public Booking GetByID(int id) => context.Bookings.FirstOrDefault(add => add.ID == id);
         public Booking GetByPhotographID(int id) => context.Bookings.FirstOrDefault(add => add.PhotographID == id);
         public Booking GetByVisagisteID(int id) => context.Bookings.FirstOrDefault(add => add.VisagisteID == id);
+        public Booking GetByServiceID(int id) => context.Bookings.FirstOrDefault(add => add.ServiceID == id);
+        public Booking GetByAddServiceID(int id) => context.Bookings.FirstOrDefault(add => add.AdditionalServicesID == id);
         public void Create(Booking entity)
         {
             context.Bookings.Add(entity);

@@ -44,7 +44,7 @@ namespace PhotoStudioApp.Views
             var photograph = repositoryWorker.GetByIDPhotograph(booking.PhotographID);
             var visagiste = repositoryWorker.GetByIDVisagiste(booking.VisagisteID);
             var hall = repositoryHall.GetByID(booking.HallID);
-            var service = repositoryServices.GetByID(booking.ID);
+            var service = repositoryServices.GetByID(booking.ServiceID);
             AdditionalService addService = null;
 
             int? addServiceID = booking.AdditionalServicesID;
