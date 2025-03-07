@@ -22,6 +22,7 @@ namespace PhotoStudioApp.Views
     /// </summary>
     public partial class WorkerListView : UserControl
     {
+        private AddWorkerView addWorkerView;
         public WorkerListView()
         {
             InitializeComponent();
@@ -30,6 +31,7 @@ namespace PhotoStudioApp.Views
 
         private void InitData()
         {
+            MainPanel.Children.Clear();
             using var context = new MyDBContext();
             RepositoryWorker repositoryWorker = new(context);
             var workerList = repositoryWorker.GetAll();
@@ -39,6 +41,28 @@ namespace PhotoStudioApp.Views
                 WorkerCards workerCards = new(worker);
                 MainPanel.Children.Add(workerCards);
             }
+        }
+
+        private void AddWorker_Click(object sender, RoutedEventArgs e)
+        {
+            MainScrollViewer.Visibility = Visibility.Collapsed;
+            addWorkerView = new();
+
+            addWorkerView.HorizontalAlignment = HorizontalAlignment.Center;
+            addWorkerView.VerticalAlignment = VerticalAlignment.Center;
+            addWorkerView.Width = 420;
+            addWorkerView.Height = 450;
+
+            addWorkerView.Close += AddWorkerView_Close;
+            MainGrid.Children.Add(addWorkerView);
+        }
+
+        private void AddWorkerView_Close(object? sender, EventArgs e)
+        {
+            addWorkerView.Close -= AddWorkerView_Close;
+            MainGrid.Children.Remove(addWorkerView);
+            InitData();
+            MainScrollViewer.Visibility = Visibility.Visible;
         }
     }
 }

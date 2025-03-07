@@ -22,9 +22,10 @@
 
         <Grid Grid.Row="0" Background="{StaticResource Text}" >
             <TextBlock Text="Список сотрудников" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" FontWeight="ExtraBlack" Foreground="{StaticResource add}"/>
+            <Button Name="AddWorker" Content="Добавить рабочего" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{StaticResource Text}" Background="{StaticResource ButtonColor}" Margin="10" Click="AddWorker_Click"/>
         </Grid>
-        <Grid Grid.Row="1">
-            <ScrollViewer  Grid.Row="1">
+        <Grid x:Name="MainGrid" Grid.Row="1">
+            <ScrollViewer Name="MainScrollViewer">
                 <StackPanel Name="MainPanel">
 
                 </StackPanel>
