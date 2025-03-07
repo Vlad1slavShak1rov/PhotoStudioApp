@@ -37,8 +37,7 @@
             <StackPanel Name="AdminPanel" VerticalAlignment="Stretch">
                 <Label Content="Админ кнопки:" FontWeight="Bold" FontSize="16"/>
                 <Grid>
-                    <Button x:Name="UpdateButton" Content="Изменить" Margin="0 0 80 0" HorizontalAlignment="Right"/>
-                    <Button x:Name="DeleteButton" Content="Удалить" HorizontalAlignment="Right"/>
+                    <Button x:Name="UpdateButton" Content="Изменить" Margin="0 0 20 0" HorizontalAlignment="Right" Click="UpdateButton_Click"/>
                 </Grid>
             </StackPanel>
 

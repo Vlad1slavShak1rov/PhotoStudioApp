@@ -24,9 +24,15 @@ namespace PhotoStudioApp.Views
     /// </summary>
     public partial class BookingCard : UserControl
     {
-        public BookingCard(Booking booking, bool IsAdmin)
+        private Booking _currentBooking;
+        private Grid _mainGrid;
+        private EditBooking editBooking;
+        public event EventHandler Update;
+        public BookingCard(Booking booking, bool IsAdmin, Grid main)
         {
             InitializeComponent();
+            _currentBooking = booking;
+            _mainGrid = main;
             InitData(booking, IsAdmin);
         }
 
@@ -62,6 +68,25 @@ namespace PhotoStudioApp.Views
 
             //Показываем или прячем кнопки администратора
             AdminPanel.Visibility = IsAdmin ? Visibility.Visible: Visibility.Collapsed;
+        }
+
+        private void UpdateButton_Click(object sender, RoutedEventArgs e)
+        {
+            editBooking = new(_currentBooking);
+
+            editBooking.HorizontalAlignment = HorizontalAlignment.Center;
+            editBooking.VerticalAlignment = VerticalAlignment.Top;
+            editBooking.Margin = new Thickness(0, 10, 0, 0);
+
+            editBooking.Close += EditBooking_Close;
+            _mainGrid.Children.Add(editBooking);
+        }
+
+        private void EditBooking_Close(object? sender, EventArgs e)
+        {
+            _mainGrid.Children.Remove(editBooking);
+            editBooking.Close -= EditBooking_Close;
+            editBooking = null;
         }
     }
 }

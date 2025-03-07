@@ -55,7 +55,7 @@ namespace PhotoStudioApp.Views
                     Message.Info($"Запись {booking.DateBooking.Date} без отзыва\nПожалуйста, оставьте свои впечатления о фотоссесии!");
                 }
 
-                BookingCard bookingCard = new(booking, false);
+                BookingCard bookingCard = new(booking, false, MainGrid);
                 MainPanel.Children.Add(bookingCard);
             }
         }
@@ -84,7 +84,7 @@ namespace PhotoStudioApp.Views
 
                 foreach (var booking in bookingList)
                 {
-                    BookingCard bookingCard = new(booking, false);
+                    BookingCard bookingCard = new(booking, false, MainGrid);
                     MainPanel.Children.Add(bookingCard);
                 }
             }
@@ -99,7 +99,7 @@ namespace PhotoStudioApp.Views
 
             foreach (var booking in bookingList)
             {
-                BookingCard bookingCard = new(booking, true);
+                BookingCard bookingCard = new(booking, true, MainGrid);
                 MainPanel.Children.Add(bookingCard);
             }
         }

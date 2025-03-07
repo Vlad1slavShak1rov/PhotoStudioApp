@@ -12,6 +12,7 @@
     <None Remove="Resources\Pictures\cameraIco.png" />
     <None Remove="Resources\Pictures\createBooking.png" />
     <None Remove="Resources\Pictures\extIco.png" />
+    <None Remove="Resources\Pictures\moneyIco.png" />
     <None Remove="Resources\Pictures\myOrderIco.png" />
     <None Remove="Resources\Pictures\settings.png" />
     <None Remove="Resources\Pictures\viewsIco.png" />
@@ -39,6 +40,7 @@
 
   <ItemGroup>
     <Resource Include="Resources\Pictures\createBooking.png" />
+    <Resource Include="Resources\Pictures\moneyIco.png" />
     <Resource Include="Resources\Pictures\myOrderIco.png" />
     <Resource Include="Resources\Pictures\settings.png" />
     <Resource Include="Resources\Pictures\viewsIco.png" />

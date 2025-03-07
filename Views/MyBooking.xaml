@@ -24,7 +24,7 @@
         <Grid Grid.Row="0" Background="{StaticResource Text}" >
             <TextBlock Text="Мои заказы" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" FontWeight="ExtraBlack" Foreground="{StaticResource add}"/>
         </Grid>
-        <Grid Grid.Row="1">
+        <Grid Name="MainGrid" Grid.Row="1">
             <ScrollViewer  Grid.Row="1">
                 <StackPanel Name="MainPanel">
             
