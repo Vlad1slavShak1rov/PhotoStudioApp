@@ -16,6 +16,8 @@ namespace PhotoStudioApp.Database.DAL
             this.context = context;
         }
         public List<Worker> GetAll() => context.Workers.ToList();
+        public List<Worker> GetAllPhotograph() => context.Workers.Where(w => w.Post == Enums.Post.Photograph).ToList();
+        public List<Worker> GetAllVisagiste() => context.Workers.Where(w => w.Post == Enums.Post.Visagiste).ToList();
         public Worker GetByID(int id) => context.Workers.FirstOrDefault(add => add.ID == id);
         public Worker GetByUserID(int id) => context.Workers.FirstOrDefault(add => add.UserID == id);
         public Worker GetByIDPhotograph(int id) => context.Workers.FirstOrDefault(ph => ph.ID == id && (Enums.Post)ph.Post == Enums.Post.Photograph);

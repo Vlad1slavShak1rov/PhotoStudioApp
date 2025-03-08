@@ -24,6 +24,7 @@ namespace PhotoStudioApp.Views
     /// </summary>
     public partial class MyBooking : UserControl
     {
+        private BookingCard bookingCard;
         public MyBooking(User user)
         {
             InitializeComponent();
@@ -55,7 +56,8 @@ namespace PhotoStudioApp.Views
                     Message.Info($"Запись {booking.DateBooking.Date} без отзыва\nПожалуйста, оставьте свои впечатления о фотоссесии!");
                 }
 
-                BookingCard bookingCard = new(booking, false, MainGrid);
+                bookingCard = new(booking, false, MainGrid);
+                bookingCard.Update += BookingCard_Update;
                 MainPanel.Children.Add(bookingCard);
             }
         }
@@ -84,22 +86,31 @@ namespace PhotoStudioApp.Views
 
                 foreach (var booking in bookingList)
                 {
-                    BookingCard bookingCard = new(booking, false, MainGrid);
+                    bookingCard = new(booking, false, MainGrid);
+                    bookingCard.Update += BookingCard_Update;
                     MainPanel.Children.Add(bookingCard);
                 }
             }
         }
 
+        //Обновление записей для администратора
+        private void BookingCard_Update(object? sender, EventArgs e)
+        {
+            InitAll();
+        }
+
         //Загрузка всего списка бронирования для администратора
         private void InitAll()
         {
+            MainPanel.Children.Clear();
             using var context = new MyDBContext();
             RepositoryBooking repositoryBooking = new(context);
             var bookingList = repositoryBooking.GetAll();
 
             foreach (var booking in bookingList)
             {
-                BookingCard bookingCard = new(booking, true, MainGrid);
+                bookingCard = new(booking, true, MainGrid);
+                bookingCard.Update += BookingCard_Update;
                 MainPanel.Children.Add(bookingCard);
             }
         }

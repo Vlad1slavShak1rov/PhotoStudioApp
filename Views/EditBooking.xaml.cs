@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Query.Internal;
 using PhotoStudioApp.Database.DAL;
 using PhotoStudioApp.Database.DBContext;
+using PhotoStudioApp.Helper;
 using PhotoStudioApp.Model;
 using System;
 using System.Collections.Generic;
@@ -47,6 +48,16 @@ namespace PhotoStudioApp.Views
             //Показываем только описание
             HallBox.DisplayMemberPath = "Description";
 
+            //Загружаем визажистов
+            VisagisteBox.ItemsSource = repositoryWorker.GetAllVisagiste();
+            //Показываем только полное имя
+            VisagisteBox.DisplayMemberPath = "FullName";
+
+            //Загружаем фотографов
+            PhotographBox.ItemsSource = repositoryWorker.GetAllPhotograph();
+            //Показываем только полное имя
+            PhotographBox.DisplayMemberPath = "FullName";
+
             //Загружаем все основные услуги
             var serviceList = repositoryServices.GetAll();
             foreach(var serv in serviceList)
@@ -75,17 +86,37 @@ namespace PhotoStudioApp.Views
             int? addServiceID = _booking.AdditionalServicesID;
             if (addServiceID != null) addService = repositoryAdditionalService.GetByID(addServiceID!.Value);
 
-            PhotographBox.Text = photograph.Name + " " + photograph.LastName;
-            VisagisteBox.Text = visagiste.Name + " " + visagiste.LastName;
-            HallBox.Text = hall.Description;
-
+            //Выводим текущие элементы выбранного бронирования
+            PhotographBox.SelectedItem = photograph;
+            VisagisteBox.SelectedItem = visagiste;
             ServiceBox.SelectedItem = service;
             AddServiceBox.SelectedItem = addService;
+            HallBox.SelectedItem = hall;
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
+            var photograph = PhotographBox.SelectedItem as Worker;
+            var visagiste = VisagisteBox.SelectedItem as Worker;
+            var hall = HallBox.SelectedItem as Hall;
+            var service = ServiceBox.SelectedItem as Services;
+            var addService = AddServiceBox.SelectedItem as AdditionalService;
+            var cost = sum;
 
+            using var context = new MyDBContext();
+            RepositoryBooking repositoryBooking = new(context);
+
+            _booking.PhotographID = photograph.ID;
+            _booking.VisagisteID = visagiste.ID;
+            _booking.HallID = hall.ID;
+            _booking.ServiceID = service.ID;
+            _booking.AdditionalServicesID = addService.ID;
+            _booking.CostServices = cost;
+
+            repositoryBooking.Update(_booking);
+            Message.Success("Успешно!");
+
+            Close?.Invoke(this,e);
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)

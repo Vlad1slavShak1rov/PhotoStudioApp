@@ -87,6 +87,7 @@ namespace PhotoStudioApp.Views
             _mainGrid.Children.Remove(editBooking);
             editBooking.Close -= EditBooking_Close;
             editBooking = null;
+            Update?.Invoke(this, e);
         }
     }
 }

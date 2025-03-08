@@ -27,13 +27,13 @@
             </Grid.ColumnDefinitions>
             <StackPanel Margin="0 0 0 0" Grid.Row="1">
                 <Label Content="Фотограф" FontSize="18" FontWeight="DemiBold" Foreground="{StaticResource Text}"/>
-                <TextBox Name="PhotographBox" Width="175" HorizontalAlignment="Left" FontSize="18" Margin="5 0 0 0"/>
+                <ComboBox Name="PhotographBox" Width="175" HorizontalAlignment="Left" FontSize="16" Margin="5 0 0 0"/>
 
                 <Label Content="Визажист" FontSize="18" FontWeight="DemiBold" Foreground="{StaticResource Text}"/>
-                <TextBox Name="VisagisteBox" Width="175" HorizontalAlignment="Left" FontSize="18" Margin="5 0 0 0"/>
+                <ComboBox Name="VisagisteBox" Width="175" HorizontalAlignment="Left" FontSize="16" Margin="5 0 0 0"/>
 
                 <Label Content="Холл" FontSize="18" FontWeight="DemiBold" Foreground="{StaticResource Text}"/>
-                <ComboBox Name="HallBox" Width="175" HorizontalAlignment="Left" FontSize="18" Margin="5 0 0 0"/>
+                <ComboBox Name="HallBox" Width="175" HorizontalAlignment="Left" FontSize="16" Margin="5 0 0 0"/>
             </StackPanel>
             <StackPanel Grid.Column="1">
                 <Label Content="Основная услуга" FontSize="18" FontWeight="DemiBold" Foreground="{StaticResource Text}"/>

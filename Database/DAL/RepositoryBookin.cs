@@ -1,4 +1,5 @@
 ﻿using PhotoStudioApp.Database.DBContext;
+using PhotoStudioApp.Helper;
 using PhotoStudioApp.Model;
 using System;
 using System.Collections.Generic;
@@ -10,11 +11,12 @@ namespace PhotoStudioApp.Database.DAL
 {
     public class RepositoryBooking : IRepository<Booking>
     {
-        private readonly MyDBContext context;
+        private readonly MyDBContext context; //Контекст для работы с БД
         public RepositoryBooking(MyDBContext context)
         {
             this.context = context;
         }
+        //Получаем все брони
         public List<Booking> GetAll() => context.Bookings.ToList();
         public List<Booking> GetAllByCustomer(int id) => context.Bookings.Where(bkg => bkg.CustomerID == id).ToList();
         public List<Booking> GetAllByPhotograph(int id) => context.Bookings.Where(bkg => bkg.PhotographID == id).ToList();
@@ -31,14 +33,29 @@ namespace PhotoStudioApp.Database.DAL
         }
         public void Update(Booking entity)
         {
-            context.Bookings.Update(entity);
-            context.SaveChanges();
+            try
+            {
+                context.Bookings.Update(entity);
+                context.SaveChanges();
+            }
+            catch(Exception ex)
+            {
+                Message.Warning(ex.Message);
+            }
+            
         }
         public void Delete(int id)
         {
-            Booking service = context.Bookings.Find(id);
-            context.Bookings.Remove(service);
-            context.SaveChanges();
+            try
+            {
+                Booking service = context.Bookings.Find(id);
+                context.Bookings.Remove(service);
+                context.SaveChanges();
+            }
+            catch(Exception ex)
+            {
+                Message.Warning(ex.Message);
+            }
         }
     }
 }
