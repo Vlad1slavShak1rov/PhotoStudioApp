@@ -141,7 +141,7 @@
             </Grid.RowDefinitions>
             <Grid Grid.Row="0" Background="{StaticResource Panel}" HorizontalAlignment="Stretch">
                 <Grid HorizontalAlignment="Center">
-                    <StackPanel Margin="0 0 0 0" HorizontalAlignment="Left">
+                    <StackPanel Margin="40 0 0 0" HorizontalAlignment="Left">
                         <Button Name="AllBooking" Height="36" Width="39" Margin="0 9 0 0" BorderBrush="{x:Null}" Style="{StaticResource ButtonOpacity}" Click="AllBooking_Click" >
                             <Button.Background>
                                 <ImageBrush ImageSource="/Resources/Pictures/myOrderIco.png"/>
@@ -168,7 +168,7 @@
                         <TextBlock Text="Список услуг" HorizontalAlignment="Center" Foreground="{StaticResource Text}" FontSize="14" FontWeight="DemiBold"/>
                     </StackPanel>
 
-                    <StackPanel Margin="400 0 0 0" HorizontalAlignment="Left">
+                    <StackPanel Margin="380 0 0 0" HorizontalAlignment="Left">
                         <Button Name="PaymentListButton" HorizontalAlignment="Center" Height="36" Width="39" Margin="0 9 0 0" BorderBrush="{x:Null}" Style="{StaticResource ButtonOpacity}" Click="PaymentListButton_Click" >
                             <Button.Background>
                                 <ImageBrush ImageSource="/Resources/Pictures/moneyIco.png"/>
