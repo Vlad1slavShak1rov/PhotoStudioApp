@@ -65,10 +65,8 @@ namespace PhotoStudioApp.Views
                             repositoryUser.Create(user);
 
                             Enum post;
-                            //Получаем выбранный элемент в ComboBox
-                            var selectedItem = PostComboBox.SelectedItem as ComboBoxItem;
                             //В зависимости от выбранного элемента в ComboBox присваиваем значение
-                            post = selectedItem.Content == "Фотограф" ? Enums.Post.Photograph : Enums.Post.Visagiste;
+                            post = PostComboBox.SelectedIndex == 0 ? Enums.Post.Photograph : Enums.Post.Visagiste;
 
                             Worker worker = new()
                             {
