@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace PhotoStudioApp.Database.DAL
 {
+    //Интерфейс для реализации классов
+    //Используется паттерн для DAL Репозиторий
     interface IRepository<T> where T:class
     {
         List<T> GetAll();
