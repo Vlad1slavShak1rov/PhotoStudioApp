@@ -52,7 +52,7 @@ namespace PhotoStudioApp.Views
             VisagisteBox.ItemsSource = repositoryWorker.GetAllVisagiste();
             //Показываем только полное имя
             VisagisteBox.DisplayMemberPath = "FullName";
-
+            
             //Загружаем фотографов
             PhotographBox.ItemsSource = repositoryWorker.GetAllPhotograph();
             //Показываем только полное имя
@@ -92,6 +92,8 @@ namespace PhotoStudioApp.Views
             ServiceBox.SelectedItem = service;
             AddServiceBox.SelectedItem = addService;
             HallBox.SelectedItem = hall;
+            sum = service.CostService + (int)addService.Cost;
+            CostBox.Text = sum.ToString();
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)

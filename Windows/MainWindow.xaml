@@ -134,7 +134,7 @@
         </Grid>
 
         <!--Грид Админа-->
-        <Grid x:Name="AdminGrid" Visibility="Visible">
+        <Grid x:Name="AdminGrid" Visibility="Collapsed">
             <Grid.RowDefinitions>
                 <RowDefinition Height="70"/>
                 <RowDefinition Height="*"/>

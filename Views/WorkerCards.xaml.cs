@@ -84,6 +84,7 @@ namespace PhotoStudioApp.Views
             _mainGrid.Children.Remove(_editWorker);
             _editWorker.Close -= _editWorker_Close;
             _editWorker = null;
+            Update?.Invoke(this, e);
         }
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
