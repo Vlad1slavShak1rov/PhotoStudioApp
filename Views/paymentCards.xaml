@@ -1,0 +1,21 @@
+﻿<UserControl x:Class="PhotoStudioApp.Views.paymentCards"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PhotoStudioApp.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="100" d:DesignWidth="600">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/ThemeColor.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid Background="{StaticResource Panel}">
+        <Label Name="datePaymentLabel" Content="Дата оплаты: " FontSize="16" Foreground="{StaticResource Text}" FontWeight="Bold"/>
+        <Label Name="methodPayment" Content="Метод оплаты: Карта"  Margin ="0 30 0 0" FontSize="16" Foreground="{StaticResource Text}" FontWeight="Bold"/>
+        <Label Name="costLabel" Content="Сумма: 100 р." Margin ="0 60 0 0" FontSize="16" Foreground="{StaticResource Text}" FontWeight="Bold"/>
+    </Grid>
+</UserControl>

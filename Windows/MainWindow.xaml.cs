@@ -132,5 +132,12 @@ namespace PhotoStudioApp.Windows
             ListServices ListServices = new(true);
             AdminMainPanel.Children.Add(ListServices);
         }
+
+        private void PaymentListButton_Click(object sender, RoutedEventArgs e)
+        {
+            AdminMainPanel.Children.Clear();
+            PaymentListView paymentList = new();
+            AdminMainPanel.Children.Add(paymentList);
+        }
     }
 }
