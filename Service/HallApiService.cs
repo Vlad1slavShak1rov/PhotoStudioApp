@@ -17,7 +17,7 @@ namespace PhotoStudioApp.Service
         }
         public async Task<Hall> GetById(int id)
         {
-            var url = $"{BaseUrl}/{id}";
+            var url = $"{BaseUrl}/id/{id}";
             return await httpClient.GetFromJsonAsync<Hall>(url);
         }
         public async Task<int> Create(HallDTO bookingServiceDTO)

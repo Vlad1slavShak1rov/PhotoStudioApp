@@ -17,7 +17,12 @@ namespace PhotoStudioApp.Service
         }
         public async Task<Review> GetById(int id)
         {
-            var url = $"{BaseUrl}/{id}";
+            var url = $"{BaseUrl}/id/{id}";
+            return await httpClient.GetFromJsonAsync<Review>(url);
+        }
+        public async Task<Review> GetByBookingID(int id)
+        {
+            var url = $"{BaseUrl}/byBooking/{id}";
             return await httpClient.GetFromJsonAsync<Review>(url);
         }
         public async Task<int> Create(ReviewDTO bookingServiceDTO)

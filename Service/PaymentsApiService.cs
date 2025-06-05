@@ -17,7 +17,7 @@ namespace PhotoStudioApp.Service
         }
         public async Task<Payment> GetById(int id)
         {
-            var url = $"{BaseUrl}/{id}";
+            var url = $"{BaseUrl}/id/{id}";
             return await httpClient.GetFromJsonAsync<Payment>(url);
         }
         public async Task<int> Create(PaymentDTO bookingServiceDTO)

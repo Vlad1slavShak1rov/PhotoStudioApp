@@ -113,7 +113,7 @@ public partial class LoginWindow : Window
             SingInButton.IsEnabled = true;
             LoginBox.IsEnabled = true;
             PasswordBox.IsEnabled = true;
-            SignUpButton.IsEnabled = false;
+            SignUpButton.IsEnabled = true;
         }
     }
 }

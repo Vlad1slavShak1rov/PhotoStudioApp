@@ -1,5 +1,6 @@
 ﻿using PhotoStudioApp.Database.DBContext;
 using PhotoStudioApp.Model;
+using PhotoStudioApp.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,13 +28,13 @@ namespace PhotoStudioApp.Views
         public HistoryBonusView(Customer customer)
         {
             InitializeComponent();
-            InitData(customer);
+            _ = InitData(customer);
         }
 
-        private void InitData(Customer customer)
+        private async Task InitData(Customer customer)
         {
-            using var context = new MyDBContext();
-            var operationHistory = context.HistoryPoints.Where(h=>h.CustomerID == customer.ID).ToList();
+            HistoryPointsReceivedApi pointsReceivedApi = new HistoryPointsReceivedApi();
+            var operationHistory = await pointsReceivedApi.GetByCustomerId(customer.ID);
             lvHistory.ItemsSource = operationHistory;
             lvHistory.DisplayMemberPath = "ShowInformation";
         }

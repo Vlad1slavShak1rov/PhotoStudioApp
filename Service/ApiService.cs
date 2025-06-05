@@ -10,7 +10,7 @@ namespace PhotoStudioApp.Service
     public class ApiService
     {
         protected readonly HttpClient httpClient;
-        protected virtual string BaseUrl => "http://localhost:5208/api";
+        protected virtual string BaseUrl => "https://localhost:7158/api";
         public ApiService()
         {
             httpClient = new HttpClient();

@@ -1,5 +1,6 @@
 ﻿using PhotoStudioApp.Database.DAL;
 using PhotoStudioApp.Database.DBContext;
+using PhotoStudioApp.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,14 +26,13 @@ namespace PhotoStudioApp.Views
         public PaymentListView()
         {
             InitializeComponent();
-            InitData();
+            _ = InitData();
         }
 
-        private void InitData()
+        private async Task InitData()
         {
-            using var context = new MyDBContext();
-            RepositoryPayment repositoryPayment = new(context);
-            var paymentList = repositoryPayment.GetAll();
+            PaymentsApiService paymentsApiService = new();
+            var paymentList = await paymentsApiService.GetAll();
 
             paymentList = paymentList.OrderBy(pay => pay.PaymentDate).ToList();
             foreach (var pay in paymentList)

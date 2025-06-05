@@ -19,12 +19,12 @@ namespace PhotoStudioApp.Service
         }
         public async Task<User> GetById(int id)
         {
-            var url = $"{BaseUrl}/{id}";
+            var url = $"{BaseUrl}/id/{id}";
             return await httpClient.GetFromJsonAsync<User>(url);
         }
         public async Task<User> GetByLogin(string login)
         {
-            var url = $"{BaseUrl}/{login}";
+            var url = $"{BaseUrl}/login/{login}";
             return await httpClient.GetFromJsonAsync<User>(url);
         }
         public async Task<int> Create(UserDTO entity)

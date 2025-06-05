@@ -18,7 +18,7 @@ namespace PhotoStudioApp.Service
         }
         public async Task<Customer> GetById(int id)
         {
-            var url = $"{BaseUrl}/{id}";
+            var url = $"{BaseUrl}/id/{id}";
             return await httpClient.GetFromJsonAsync<Customer>(url);
         }
         public async Task<Customer> GetByUserId(int userId)

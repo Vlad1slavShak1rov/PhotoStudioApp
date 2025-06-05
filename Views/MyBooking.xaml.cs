@@ -2,6 +2,7 @@
 using PhotoStudioApp.Database.DBContext;
 using PhotoStudioApp.Helper;
 using PhotoStudioApp.Model;
+using PhotoStudioApp.Service;
 using PhotoStudioApp.Windows;
 using System;
 using System.Collections.Generic;
@@ -32,28 +33,26 @@ namespace PhotoStudioApp.Views
             InitializeComponent();
 
             if ((Enums.Role)user.Role == Enums.Role.Customer)
-                InitData(user);
+                _ = InitData(user);
             else if ((Enums.Role)user.Role == Enums.Role.Worker)
-                InitDataWorker(user);
+                _ = InitDataWorker(user);
             else
-                InitAll();
+                _ = InitAll();
         }
         
-        private void InitData(User user)
+        private async Task InitData(User user)
         {
-            using var context = new MyDBContext();
+            CustomerApiService customerApiService = new();
+            BookingApiService bookingApiService =new();
+            ReviewApiService reviewApiService = new();
 
-            RepositoryCustomer repositoryCustomer = new(context);
-            RepositoryBooking repositoryBooking = new(context);
-            RepositoryReview repositoryReview = new(context);
-
-            var customer = repositoryCustomer.GetByUserID(user.ID);
-            bookings = repositoryBooking.GetAllByCustomer(customer.ID);
+            var customer = await customerApiService.GetByUserId(user.ID);
+            bookings = await bookingApiService.GetAllByCustomer(customer.ID);
 
             foreach(var booking in bookings)
             {
                 //Показываем MessageBox если время бронирования меньше, чем текущее время
-                if (booking.DateBooking < DateTime.Now && repositoryReview.GetByBookingID(booking.ID) == null)
+                if (booking.DateBooking < DateTime.Now && await reviewApiService.GetByBookingID(booking.ID) == null)
                 {
                     Message.Info($"Запись {booking.DateBooking.Date} без отзыва\nПожалуйста, оставьте свои впечатления о фотоссесии!");
                 }
@@ -65,25 +64,24 @@ namespace PhotoStudioApp.Views
         }
 
         //Метод загружает заказы конкретного рабочего
-        private void InitDataWorker(User user)
+        private async Task InitDataWorker(User user)
         {
-            using var context = new MyDBContext();
+            WorkerApiService workerApiService = new();
+            BookingApiService bookingApiService = new();
+            ReviewApiService reviewApiService = new();
 
-            RepositoryWorker repositoryWorker= new(context);
-            RepositoryBooking repositoryBooking = new(context);
-            RepositoryReview repositoryReview = new(context);
 
-            var worker = repositoryWorker.GetByUserID(user.ID);
+            var worker = await workerApiService.GetByUserId(user.ID);
             if(worker != null)
             {
                 List<Booking> bookingList;
                 if ((Enums.Post)worker.Post == Enums.Post.Photograph)
                 {
-                    bookingList = repositoryBooking.GetAllByPhotograph(worker.ID);
+                    bookingList = await bookingApiService.GetAllByPhotograph(worker.ID);
                 }
                 else
                 {
-                    bookingList = repositoryBooking.GetAllByVisagiste(worker.ID);
+                    bookingList = await bookingApiService.GetAllByVisagiste(worker.ID);
                 }
 
                 foreach (var booking in bookingList)
@@ -96,19 +94,19 @@ namespace PhotoStudioApp.Views
         }
 
         //Обновление записей для администратора
-        private void BookingCard_Update(object? sender, EventArgs e)
+        private async void BookingCard_Update(object? sender, EventArgs e)
         {
-            InitAll();
+            await InitAll();
         }
 
         //Загрузка всего списка бронирования для администратора
-        private void InitAll()
+        private async Task InitAll()
         {
             btCreateTable.Visibility = Visibility.Visible;
             MainPanel.Children.Clear();
-            using var context = new MyDBContext();
-            RepositoryBooking repositoryBooking = new(context);
-            bookings = repositoryBooking.GetAll();
+
+            BookingApiService bookingApiService = new();
+            bookings = await bookingApiService.GetAll();
 
             foreach (var booking in bookings)
             {

@@ -1,6 +1,7 @@
 ﻿using PhotoStudioApp.Database.DAL;
 using PhotoStudioApp.Database.DBContext;
 using PhotoStudioApp.Model;
+using PhotoStudioApp.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,11 +31,11 @@ namespace PhotoStudioApp.Views
         {
             InitializeComponent();
             this.isAdmin = isAdmin;
-            InitData();
+            _ = InitData();
            
         }
 
-        private void InitData()
+        private async Task InitData()
         {
             StackPanelServices.Children.Clear();
             if (servicesList != null && addServicesList != null)
@@ -42,17 +43,18 @@ namespace PhotoStudioApp.Views
                 servicesList.Clear();
                 addServicesList.Clear();
             }
-            using var context = new MyDBContext();
-            RepositoryServices repositoryServices = new(context);
-            RepositoryAdditionalService repositoryAdditionalService = new(context);
 
-            servicesList = repositoryServices.GetAll();
-            addServicesList = repositoryAdditionalService.GetAll();
-            LoadSerivec();
-            LoadAddSerivec();
+            ServiceApiService serviceApiService = new();
+            AdditionalServiceApi additionalService = new();
+
+            servicesList = await serviceApiService.GetAll();
+            addServicesList = await additionalService.GetAll();
+
+            await LoadSerivec();
+            await LoadAddSerivec();
         }
         //Загрузка Основных услуг
-        private void LoadSerivec()
+        private async Task LoadSerivec()
         {
             foreach (var service in servicesList)
             {
@@ -63,7 +65,7 @@ namespace PhotoStudioApp.Views
             }
         }
         //Загрузка Дополнительных услуг
-        private void LoadAddSerivec()
+        private async Task LoadAddSerivec()
         {
             foreach (var addService in addServicesList)
             {
@@ -91,7 +93,7 @@ namespace PhotoStudioApp.Views
                 }
             }
         }
-        private void FiltersOn(string filter)
+        private async void FiltersOn(string filter)
         {
             if(StackPanelServices != null)
             {
@@ -99,16 +101,16 @@ namespace PhotoStudioApp.Views
                 {
                     case "Все":
                         StackPanelServices.Children.Clear();
-                        LoadSerivec();
-                        LoadAddSerivec();
+                        await LoadSerivec();
+                        await LoadAddSerivec();
                         break;
                     case "Основные услуги":
                         StackPanelServices.Children.Clear();
-                        LoadSerivec();
+                        await LoadSerivec();
                         break;
                     case "Доп. услуги":
                         StackPanelServices.Children.Clear();
-                        LoadAddSerivec();
+                        await LoadAddSerivec();
                         break;
                 }
             }
@@ -145,9 +147,9 @@ namespace PhotoStudioApp.Views
             }
         }
 
-        private void ServiceCardControl_Update(object? sender, EventArgs e)
+        private async void ServiceCardControl_Update(object? sender, EventArgs e)
         {
-            InitData();
+            await InitData();
         }
     }
 }

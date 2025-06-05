@@ -15,9 +15,20 @@ namespace PhotoStudioApp.Service
         {
             return await httpClient.GetFromJsonAsync<List<Worker>>(BaseUrl);
         }
+        public async Task<List<Worker>> GetAllVisagiste()
+        {
+            var url = $"{BaseUrl}/visagiste";
+            return await httpClient.GetFromJsonAsync<List<Worker>>(url);
+        }
+        public async Task<List<Worker>> GetAllPhotograph()
+        {
+            var url = $"{BaseUrl}/photograph";
+            return await httpClient.GetFromJsonAsync<List<Worker>>(url);
+        }
+
         public async Task<Worker> GetById(int id)
         {
-            var url = $"{BaseUrl}/{id}";
+            var url = $"{BaseUrl}/id/{id}";
             return await httpClient.GetFromJsonAsync<Worker>(url);
         }
         public async Task<Worker> GetByUserId(int userId)

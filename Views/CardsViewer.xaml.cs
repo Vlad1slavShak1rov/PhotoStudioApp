@@ -1,6 +1,7 @@
 ﻿using PhotoStudioApp.Database.DAL;
 using PhotoStudioApp.Database.DBContext;
 using PhotoStudioApp.Model;
+using PhotoStudioApp.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,14 +27,14 @@ namespace PhotoStudioApp.Views
         public CardsViewer(Review review)
         {
             InitializeComponent();
-            InitData(review);
+            _ = InitData(review);
         }
 
-        private void InitData(Review review)
+        private async Task InitData(Review review)
         {
-            using var context = new MyDBContext();
-            RepositoryCustomer repositoryCustomer = new(context);
-            var customer = repositoryCustomer.GetByID(review.CustomerID);
+            CustomerApiService customerApiService = new();
+            
+            var customer = await customerApiService.GetById(review.CustomerID);
             if(review != null)
             {
                 NameLabel.Content = customer.Name + ' ' + customer.SecondName;

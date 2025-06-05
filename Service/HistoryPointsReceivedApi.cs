@@ -18,8 +18,13 @@ namespace PhotoStudioApp.Service
         }
         public async Task<HistoryPointsReceived> GetById(int id)
         {
-            var url = $"{BaseUrl}/{id}";
+            var url = $"{BaseUrl}/id/{id}";
             return await httpClient.GetFromJsonAsync<HistoryPointsReceived>(url);
+        }
+        public async Task<List<HistoryPointsReceived>> GetByCustomerId(int userId)
+        {
+            var url = $"{BaseUrl}/byUser/{userId}";
+            return await httpClient.GetFromJsonAsync<List<HistoryPointsReceived>>(url);
         }
         public async Task<int> Create(HistoryPointsReceivedDTO bookingServiceDTO)
         {

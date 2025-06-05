@@ -16,9 +16,35 @@ namespace PhotoStudioApp.Service
         {
             return await httpClient.GetFromJsonAsync<List<Booking>>(BaseUrl);
         }
+        public async Task<List<Booking>> GetAllByCustomer(int custId)
+        {
+            var url = $"{BaseUrl}/byCustomer/{custId}";
+            return await httpClient.GetFromJsonAsync<List<Booking>>(url);
+        }
+        public async Task<List<Booking>> GetAllByPhotograph(int custId)
+        {
+            var url = $"{BaseUrl}/byPhotograph/{custId}";
+            return await httpClient.GetFromJsonAsync<List<Booking>>(url);
+        }
+        public async Task<List<Booking>> GetAllByVisagiste(int custId)
+        {
+            var url = $"{BaseUrl}/byVisagiste/{custId}";
+            return await httpClient.GetFromJsonAsync<List<Booking>>(url);
+        }
+
         public async Task<Booking> GetById(int id)
         {
-            var url = $"{BaseUrl}/{id}";
+            var url = $"{BaseUrl}/id/{id}";
+            return await httpClient.GetFromJsonAsync<Booking>(url);
+        }
+        public async Task<Booking> GetByPhotographId(int id)
+        {
+            var url = $"{BaseUrl}/byPhotographID/{id}";
+            return await httpClient.GetFromJsonAsync<Booking>(url);
+        }
+        public async Task<Booking> GetByVisagisteID(int id)
+        {
+            var url = $"{BaseUrl}/byVisagisteID/{id}";
             return await httpClient.GetFromJsonAsync<Booking>(url);
         }
         public async Task<int> Create(BookingServiceDTO bookingServiceDTO)

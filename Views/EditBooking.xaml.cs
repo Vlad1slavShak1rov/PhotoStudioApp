@@ -3,6 +3,7 @@ using PhotoStudioApp.Database.DAL;
 using PhotoStudioApp.Database.DBContext;
 using PhotoStudioApp.Helper;
 using PhotoStudioApp.Model;
+using PhotoStudioApp.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,34 +33,33 @@ namespace PhotoStudioApp.Views
         {
             InitializeComponent();
             _booking = booking;
-            InitData();
+            _ = InitData();
         }
 
-        private void InitData()
+        private async Task InitData()
         {
-            using var context = new MyDBContext();
-            RepositoryWorker repositoryWorker = new(context);
-            RepositoryHall repositoryHall = new(context);
-            RepositoryAdditionalService repositoryAdditionalService = new(context);
-            RepositoryServices repositoryServices = new(context);
+            ServiceApiService serviceApiService = new();
+            AdditionalServiceApi additionalServiceApi = new();
+            HallApiService hallApiService = new();
+            WorkerApiService workerApiService = new();
 
             //Загружаем все студии
-            HallBox.ItemsSource = repositoryHall.GetAll();
+            HallBox.ItemsSource = await hallApiService.GetAll();
             //Показываем только описание
             HallBox.DisplayMemberPath = "Description";
 
             //Загружаем визажистов
-            VisagisteBox.ItemsSource = repositoryWorker.GetAllVisagiste();
+            VisagisteBox.ItemsSource = await workerApiService.GetAllVisagiste();
             //Показываем только полное имя
             VisagisteBox.DisplayMemberPath = "FullName";
             
             //Загружаем фотографов
-            PhotographBox.ItemsSource = repositoryWorker.GetAllPhotograph();
+            PhotographBox.ItemsSource = await workerApiService.GetAllPhotograph();
             //Показываем только полное имя
             PhotographBox.DisplayMemberPath = "FullName";
 
             //Загружаем все основные услуги
-            var serviceList = repositoryServices.GetAll();
+            var serviceList = await serviceApiService.GetAll();
             foreach(var serv in serviceList)
             {
                 ServiceBox.Items.Add(serv);
@@ -68,7 +68,7 @@ namespace PhotoStudioApp.Views
             }
 
             //Загружаем все дополнительные услуги 
-            var addServList = repositoryAdditionalService.GetAll();
+            var addServList = await additionalServiceApi.GetAll();
             foreach(var addServ in addServList)
             {
                 AddServiceBox.Items.Add(addServ);
@@ -77,14 +77,14 @@ namespace PhotoStudioApp.Views
             }
 
             //Получаем все модели, связанные в таблице Booking
-            var photograph = repositoryWorker.GetByIDPhotograph(_booking.PhotographID);
-            var visagiste = repositoryWorker.GetByIDVisagiste(_booking.VisagisteID);
-            var hall = repositoryHall.GetByID(_booking.HallID);
-            var service = repositoryServices.GetByID(_booking.ServiceID);
+            var photograph = await workerApiService.GetByPhotograph(_booking.PhotographID);
+            var visagiste = await workerApiService.GetByVisagiste(_booking.VisagisteID);
+            var hall = await hallApiService.GetById(_booking.HallID);
+            var service = await serviceApiService.GetById(_booking.ServiceID);
             AdditionalService addService = null;
 
             int? addServiceID = _booking.AdditionalServicesID;
-            if (addServiceID != null) addService = repositoryAdditionalService.GetByID(addServiceID!.Value);
+            if (addServiceID != null) addService = await additionalServiceApi.GetById(addServiceID!.Value);
 
             //Выводим текущие элементы выбранного бронирования
             PhotographBox.SelectedItem = photograph;
@@ -96,7 +96,7 @@ namespace PhotoStudioApp.Views
             CostBox.Text = sum.ToString();
         }
 
-        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        private async void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             var photograph = PhotographBox.SelectedItem as Worker;
             var visagiste = VisagisteBox.SelectedItem as Worker;
@@ -105,8 +105,7 @@ namespace PhotoStudioApp.Views
             var addService = AddServiceBox.SelectedItem as AdditionalService;
             var cost = sum;
 
-            using var context = new MyDBContext();
-            RepositoryBooking repositoryBooking = new(context);
+            BookingApiService bookingApiService = new();
 
             _booking.PhotographID = photograph.ID;
             _booking.VisagisteID = visagiste.ID;
@@ -115,7 +114,9 @@ namespace PhotoStudioApp.Views
             _booking.AdditionalServicesID = addService.ID;
             _booking.CostServices = cost;
 
-            repositoryBooking.Update(_booking);
+            var bookingDTO = ConvertToDTO.ToBookingDTO(_booking);
+
+            await bookingApiService.Update(bookingDTO);
             Message.Success("Успешно!");
 
             Close?.Invoke(this,e);

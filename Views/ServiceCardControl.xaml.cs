@@ -2,6 +2,7 @@
 using PhotoStudioApp.Database.DBContext;
 using PhotoStudioApp.Helper;
 using PhotoStudioApp.Model;
+using PhotoStudioApp.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -61,13 +62,12 @@ namespace PhotoStudioApp.Views
             AdminButtons.Visibility = isAdmin ? Visibility.Visible : Visibility.Collapsed;
         }
 
-        private void EditButton_Click(object sender, RoutedEventArgs e)
+        private async void EditButton_Click(object sender, RoutedEventArgs e)
         {
-            using var context = new MyDBContext();
-            RepositoryAdditionalService repositoryAdditionalService = new(context);
-            RepositoryServices repositoryServices = new(context);
+            AdditionalServiceApi additionalServiceApi = new();
+            ServiceApiService serviceApiService = new();
 
-            var service = repositoryServices.GetByName(ServiceCardExpander.Header.ToString());
+            var service = await serviceApiService.GetByName(ServiceCardExpander.Header.ToString());
 
             if(service != null)   //Если загружена основная услуга
             {
@@ -75,7 +75,7 @@ namespace PhotoStudioApp.Views
             }
             else //Загружаем дополнительную услугу
             {
-                var addService = repositoryAdditionalService.GetByName(ServiceCardExpander.Header.ToString());
+                var addService = await additionalServiceApi.GetByName(ServiceCardExpander.Header.ToString());
                 EditService(addService);
             }
         }

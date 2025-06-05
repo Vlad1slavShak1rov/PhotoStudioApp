@@ -1,6 +1,7 @@
 ﻿using PhotoStudioApp.Database.DAL;
 using PhotoStudioApp.Database.DBContext;
 using PhotoStudioApp.Model;
+using PhotoStudioApp.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,16 +29,15 @@ namespace PhotoStudioApp.Views
         public WorkerListView()
         {
             InitializeComponent();
-            InitData();
+            _ = InitData();
         }
 
-        private void InitData()
+        private async Task InitData()
         {
             if(workerList != null) workerList.Clear();
-            using var context = new MyDBContext();
-            RepositoryWorker repositoryWorker = new(context);
-            workerList = repositoryWorker.GetAll();
-            LoadChildren(workerList);
+            WorkerApiService workerApiService = new();
+            workerList = await workerApiService.GetAll();
+            await LoadChildren(workerList);
         }
 
         private void AddWorker_Click(object sender, RoutedEventArgs e)
@@ -54,15 +54,15 @@ namespace PhotoStudioApp.Views
             MainGrid.Children.Add(addWorkerView);
         }
 
-        private void AddWorkerView_Close(object? sender, EventArgs e)
+        private async void AddWorkerView_Close(object? sender, EventArgs e)
         {
             addWorkerView.Close -= AddWorkerView_Close;
             MainGrid.Children.Remove(addWorkerView);
-            InitData();
+            await InitData();
             MainScrollViewer.Visibility = Visibility.Visible;
         }
 
-        private void LoadChildren(List<Worker> workerList)
+        private async Task LoadChildren(List<Worker> workerList)
         {
             if(MainPanel != null) MainPanel.Children.Clear();
             if (workerList != null)
@@ -77,13 +77,13 @@ namespace PhotoStudioApp.Views
            
         }
 
-        private void WorkerCards_Update(object? sender, EventArgs e)
+        private async void WorkerCards_Update(object? sender, EventArgs e)
         {
-            InitData();
+            await InitData();
         }
 
         //Фильтрация
-        private void FilteredComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void FilteredComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var selectedItem = FilteredComboBox.SelectedItem as ComboBoxItem;
             string filter = selectedItem.Content.ToString();
@@ -102,7 +102,7 @@ namespace PhotoStudioApp.Views
                     break;
             }
 
-            LoadChildren(filtredList);
+            await LoadChildren(filtredList);
         }
     }
 }

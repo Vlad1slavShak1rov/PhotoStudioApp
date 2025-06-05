@@ -3,6 +3,7 @@ using PhotoStudioApp.Database.DBContext;
 using PhotoStudioApp.Enums;
 using PhotoStudioApp.Helper;
 using PhotoStudioApp.Model;
+using PhotoStudioApp.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -61,12 +62,14 @@ namespace PhotoStudioApp.Views
             Close?.Invoke(this,e);
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private async void Button_Click_1(object sender, RoutedEventArgs e)
         {
             if (Validator.IsNotNullOrWhiteSpace(ServiceNameBox.Text, DescriptionBox.Text, CostBox.Text))
             {
                 if (_services == null)
                 {
+                    AdditionalServiceApi additionalService = new();
+
                     if (!decimal.TryParse(CostBox.Text,out decimal cost))
                     {
                         Message.Warning("Вы ввели некорректную цену!");
@@ -76,12 +79,12 @@ namespace PhotoStudioApp.Views
                     _addServices.Description = DescriptionBox.Text;
                     _addServices.Cost = cost;
 
-                    using var context = new MyDBContext();
-                    RepositoryAdditionalService repositoryAdditionalService = new(context);
-                    repositoryAdditionalService.Update(_addServices);
+                    var addServiceDTO = ConvertToDTO.ToAdditionalServiceDTO(_addServices);
+                    await additionalService.Update(addServiceDTO);
                 }
                 else
                 {
+                    ServiceApiService serviceApiService = new();
                     if (!int.TryParse(CostBox.Text, out int cost))
                     {
                         Message.Warning("Вы ввели некорректную цену!");
@@ -91,9 +94,8 @@ namespace PhotoStudioApp.Views
                     _services.Description = DescriptionBox.Text;
                     _services.CostService = cost;
 
-                    using var context = new MyDBContext();
-                    RepositoryServices repositoryServices = new(context);
-                    repositoryServices.Update(_services);
+                    var serviceDTO = ConvertToDTO.ToServiceDTO(_services);
+                    await serviceApiService.Update(serviceDTO);
                 }
                 Message.Success("Успешно!");
                 Close?.Invoke(this,e);

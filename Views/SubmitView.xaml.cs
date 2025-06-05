@@ -2,6 +2,7 @@
 using PhotoStudioApp.Database.DBContext;
 using PhotoStudioApp.Helper;
 using PhotoStudioApp.Model;
+using PhotoStudioApp.Service;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -32,28 +33,27 @@ namespace PhotoStudioApp.Views
         public SubmitView(User user)
         {
             InitializeComponent();
-            IntiData();
+            _ = IntiData();
             currentUser = user;
         }
 
         //Логика реализации загрузки данных. 
         //В нее входит загрузка комбобокса, где хранятся бронирования данного пользователя
-        private void IntiData()
+        private async Task IntiData()
         {
             MyServiceBox.Items.Clear();
 
-            using var context = new MyDBContext();
-            RepositoryBooking repositoryBooking = new(context);
-            RepositoryReview repositoryReview = new(context);
+            BookingApiService bookingApi = new();
+            ReviewApiService reviewApi = new();
 
-            var reviewsList = repositoryReview.GetAll();
-            var bookingList = repositoryBooking.GetAll();
+            var reviewsList = await reviewApi.GetAll();
+            var bookingList = await bookingApi.GetAll();
 
             foreach(var booking in bookingList)
             {
                 //Если время брони меньше, чем текущее и отзыва нету в таблице Отзывы,
                 //То добавляем Item добавляем в MyServiceBox
-                if (booking.DateBooking <= DateTime.Now && repositoryReview.GetByBookingID(booking.ID) == null)
+                if (booking.DateBooking <= DateTime.Now && await reviewApi.GetByBookingID(booking.ID) == null)
                 {
                     MyServiceBox.Items.Add(booking);
                     MyServiceBox.DisplayMemberPath = "GetNameBooking";
@@ -65,29 +65,30 @@ namespace PhotoStudioApp.Views
 
         //Нажатие на кнопку Отправить
         //Сохранение отзыва в БД
-        private void SubmiteButton_Click(object sender, RoutedEventArgs e)
+        private async void SubmiteButton_Click(object sender, RoutedEventArgs e)
         {
             if (Validator.IsNotNullOrWhiteSpace(MyServiceBox.Items.ToString()))
             {
-                using var context = new MyDBContext();
-                RepositoryReview repositoryReview = new(context);
-                RepositoryCustomer repositoryCustomer = new(context);
-                RepositoryBooking repositoryBooking = new(context);
+                ReviewApiService reviewApi = new();
+                CustomerApiService customerApi = new();
+                BookingApiService bookingApi = new();
 
-                var customer = repositoryCustomer.GetByUserID(currentUser.ID);
+                var customer = await customerApi.GetByUserId(currentUser.ID);
                 if(customer != null)
                 {
-                    var booling = MyServiceBox.SelectedItem as Booking;
+                    var booking = MyServiceBox.SelectedItem as Booking;
                     Review review = new()
                     {
-                        BookingID = booling.ID,
+                        BookingID = booking.ID,
                         CustomerID = customer.ID,
                         Rating = rate,
                         ReviewText = ReviewTextBox.Text,
                         ReviewDate = DateTime.Now
                     };
 
-                    repositoryReview.Create(review);
+                    var reviewDTO = ConvertToDTO.ToReviewDTO(review);
+
+                    await reviewApi.Create(reviewDTO);
                     Message.Success("Отзыв добавлен!");
                     CloseControl?.Invoke(this, e);
                 }

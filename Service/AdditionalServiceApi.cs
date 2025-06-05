@@ -21,10 +21,14 @@ namespace PhotoStudioApp.Service
 
         public async Task<AdditionalService> GetById(int id)
         {
-            var url = $"{BaseUrl}/{id}";
+            var url = $"{BaseUrl}/id/{id}";
             return await httpClient.GetFromJsonAsync<AdditionalService>(url);
         }
-
+        public async Task<AdditionalService> GetByName(string name)
+        {
+            var url = $"{BaseUrl}/name/{name}";
+            return await httpClient.GetFromJsonAsync<AdditionalService>(url);
+        }
         public async Task<int> Create(AdditionalServiceDTO service)
         {
            var res = await httpClient.PostAsJsonAsync(BaseUrl, service);

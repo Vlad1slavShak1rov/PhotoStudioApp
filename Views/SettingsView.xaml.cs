@@ -2,6 +2,7 @@
 using PhotoStudioApp.Database.DBContext;
 using PhotoStudioApp.Helper;
 using PhotoStudioApp.Model;
+using PhotoStudioApp.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,21 +33,20 @@ namespace PhotoStudioApp.Views
         {
             InitializeComponent();
             _currentUser = user;
-            GetWorker();
-            InitData();
+            _ = GetWorker();
+            _ = InitData();
 
         }
 
         //Получаем сотрудника
-        private void GetWorker()
+        private async Task GetWorker()
         {
-            using var context = new MyDBContext();
-            RepositoryWorker repositoryWorker = new(context);
-            _currentWorker = repositoryWorker.GetByUserID(_currentUser.ID);
+            WorkerApiService workerApiService = new();
+            _currentWorker = await workerApiService.GetByUserId(_currentUser.ID);
         }
 
         //Инициализируем TextBox
-        private void InitData()
+        private async Task InitData()
         {
             SurnameTextBox.Text = _currentWorker.SecondName;
             NameTextBox.Text = _currentWorker.Name;
@@ -54,38 +54,39 @@ namespace PhotoStudioApp.Views
             PostBox.Text = (Enums.Post)_currentWorker.Post == Enums.Post.Photograph ? "Фотограф" : "Визажист";
         }
 
-        private void BackButton_Click(object sender, RoutedEventArgs e)
+        private async void BackButton_Click(object sender, RoutedEventArgs e)
         {
             if (SurnameTextBox.Text != _currentWorker.SecondName || NameTextBox.Text != _currentWorker.Name || LastNameBox.Text != _currentWorker.LastName
                 && Validator.IsNotNullOrWhiteSpace(SurnameTextBox.Text, NameTextBox.Text, LastNameBox.Text))
             {
                 var result = Message.Question("У вас измененные данные. Сохранить их?");
-                if(result == MessageBoxResult.Yes) SaveData();
+                if(result == MessageBoxResult.Yes) await SaveData();
             }
             CloseClick?.Invoke(this, e);
         }
 
-        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        private async void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             if (Validator.IsNotNullOrWhiteSpace(SurnameTextBox.Text, NameTextBox.Text, LastNameBox.Text))
             {
-                SaveData();
+                await SaveData();
                 CloseClick?.Invoke(this, e);
             }
             else MessageBox.Show("У вас есть незаполненные поля!");
         }
 
         //Сохраняем изменения
-        private void SaveData()
+        private async Task SaveData()
         {
-            using var context = new MyDBContext();
-            RepositoryWorker repositoryWorker = new(context);
+            WorkerApiService workerApiService = new();
 
             _currentWorker.Name = NameTextBox.Text;
             _currentWorker.SecondName = SurnameTextBox.Text;
             _currentWorker.LastName = LastNameBox.Text;
 
-            repositoryWorker.Update(_currentWorker);
+            var workerDTO = ConvertToDTO.ToWorkerDTO(_currentWorker);
+
+            await workerApiService.Update(workerDTO);
             Message.Success("Успешно!");
         }
     }

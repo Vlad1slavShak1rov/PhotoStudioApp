@@ -2,6 +2,7 @@
 using PhotoStudioApp.Database.DBContext;
 using PhotoStudioApp.Helper;
 using PhotoStudioApp.Model;
+using PhotoStudioApp.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,10 +37,10 @@ namespace PhotoStudioApp.Views
             InitializeComponent();
             _currentWorker = worker;
             _mainGrid = grid;
-            InitData();
+            _= InitData();
         }
 
-        private void InitData()
+        private async Task InitData()
         {
             string post = "";
 
@@ -55,12 +56,11 @@ namespace PhotoStudioApp.Views
             }
             WorkerExpander.Header = $"ФИО: {_currentWorker.SecondName} {_currentWorker.Name} {_currentWorker.LastName}     Должность: {post}";
 
-            using var context = new MyDBContext();
-            RepositoryBooking repositoryBooking = new(context);
+            BookingApiService bookingApiService = new();
 
             // Получаем список бронирований в зависимости от роли работника
             var bookingList = (Enums.Post)_currentWorker.Post == Enums.Post.Photograph ?
-                repositoryBooking.GetAllByPhotograph(_currentWorker.ID) : repositoryBooking.GetAllByVisagiste(_currentWorker.ID);
+                await bookingApiService.GetAllByPhotograph(_currentWorker.ID) : await bookingApiService.GetAllByVisagiste(_currentWorker.ID);
 
             AllBookingCB.ItemsSource = bookingList;
             // Указываем путь к отображаемому свойству
@@ -87,15 +87,14 @@ namespace PhotoStudioApp.Views
             Update?.Invoke(this, e);
         }
 
-        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        private async void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            using var context = new MyDBContext();
-            RepositoryBooking repositoryBooking = new(context);
-            RepositoryWorker repositoryWorker = new(context);
-            RepositoryUser repositoryUser = new(context);
+            BookingApiService bookingApiService = new();
+            WorkerApiService workerApiService = new();
+            UserApiService userApiService = new();
 
             //Получаем бронирование в зависисомсти от роли сотрудника
-            var booking = _currentWorker.Post == Enums.Post.Photograph ? repositoryBooking.GetByPhotographID(_currentWorker.ID) : repositoryBooking.GetByVisagisteID(_currentWorker.ID);
+            var booking = _currentWorker.Post == Enums.Post.Photograph ? await bookingApiService.GetByPhotographId(_currentWorker.ID) : await bookingApiService.GetByVisagisteID(_currentWorker.ID);
 
             //Если работник не закреплен за бронью
             if (booking == null)
@@ -103,8 +102,8 @@ namespace PhotoStudioApp.Views
                 var result = Message.Question("Вы уверены, что хотите удалить сотрудника?");
                 if(result == MessageBoxResult.Yes)
                 {
-                    repositoryWorker.Delete(_currentWorker.ID);
-                    repositoryUser.Delete(_currentWorker.UserID);
+                    await workerApiService.DeleteById(_currentWorker.ID);
+                    await userApiService.DeleteById(_currentWorker.UserID);
                     Message.Success("Успешно!");
                     Update?.Invoke(this,e);
                 }

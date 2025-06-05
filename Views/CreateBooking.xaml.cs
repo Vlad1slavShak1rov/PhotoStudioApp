@@ -7,6 +7,7 @@ using PhotoStudioApp.Database.DBContext;
 using PhotoStudioApp.Enums;
 using PhotoStudioApp.Helper;
 using PhotoStudioApp.Model;
+using PhotoStudioApp.Service;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -40,36 +41,37 @@ namespace PhotoStudioApp.Views
         {
             InitializeComponent();
             _user = user;
-            using (var context = new MyDBContext())
-            {
-                RepositoryCustomer repositoryCustomer = new(context);
-                _customer = repositoryCustomer.GetByUserID(_user.ID);
-                if(_customer.Balance == 0)
-                {
-                    selectedBonusPay.IsEnabled = false;
-                    rbNoUse.IsEnabled = false;
-                }
-            }
-           
-            InitData();
+
+            _ = InitCustomer();
+            _ = InitData();
+
             this.Loaded +=(e,s) => ServicesComboBox.SelectionChanged += AllCombobox_SelectionChanged;
             this.Loaded += (e, s) => AdditionalServicesCombobox.SelectionChanged += AllCombobox_SelectionChanged;
         }
 
-        //Инициализирует ComboBox
-        private void InitData() 
+        private async Task InitCustomer()
         {
-            using var context = new MyDBContext();
+            CustomerApiService customerApiService = new();
+            _customer = await customerApiService.GetByUserId(_user.ID);
+            if (_customer.Balance == 0)
+            {
+                selectedBonusPay.IsEnabled = false;
+                rbNoUse.IsEnabled = false;
+            }
+        }
 
-            RepositoryServices repositoryServices = new(context);
-            RepositoryAdditionalService repositoryAdditionalService = new(context);
-            RepositoryHall repositoryHall = new(context);
-            RepositoryWorker repositoryWorker = new(context);
+        //Инициализирует ComboBox
+        private async Task InitData() 
+        {
+            ServiceApiService serviceApiService = new();
+            AdditionalServiceApi additionalServiceApi = new();
+            HallApiService hallApiService = new();
+            WorkerApiService workerApiService = new();
 
-            var servicesList = repositoryServices.GetAll();
-            var additionalList = repositoryAdditionalService.GetAll();
-            var hallList = repositoryHall.GetAll();
-            var workerList = repositoryWorker.GetAll();
+            var servicesList = await serviceApiService.GetAll();
+            var additionalList = await additionalServiceApi.GetAll();
+            var hallList = await hallApiService.GetAll();
+            var workerList = await workerApiService.GetAll();
 
             InitComboBox<Services>(ServicesComboBox, servicesList);
             InitComboBox<AdditionalService>(AdditionalServicesCombobox, additionalList);
@@ -79,7 +81,7 @@ namespace PhotoStudioApp.Views
 
         //Мы используем обобщение чтобы метод мог принимать
         //списки разных типы
-        private void InitComboBox<T>(ComboBox comboBox, List<T> list)
+        private async void InitComboBox<T>(ComboBox comboBox, List<T> list)
         {
 
             foreach (var item in list)
@@ -115,7 +117,7 @@ namespace PhotoStudioApp.Views
             }
         }
 
-        private void AllCombobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void AllCombobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (AdditionalServicesCombobox.SelectedItem != null && ServicesComboBox.SelectedItem != null)
             {
@@ -148,12 +150,12 @@ namespace PhotoStudioApp.Views
             }
         }
 
-        private void PayButton_Click(object sender, RoutedEventArgs e)
+        private async void PayButton_Click(object sender, RoutedEventArgs e)
         {
-            using var context = new MyDBContext();
-            RepositoryBooking repositoryBooking = new(context);
-            RepositoryCustomer repositoryCustomer = new(context);
-            RepositoryPayment repositoryPayment = new(context);
+            BookingApiService bookingApiService = new();
+            CustomerApiService customerApiService = new();
+            PaymentsApiService paymentsApiService = new();
+            HistoryPointsReceivedApi historyPointsReceivedApi = new();
 
             //Собираем данные с комбобоксов и преобразуем их в нужный тип
             var photograph = WorkerCombobox.SelectedItem as Worker;
@@ -183,7 +185,7 @@ namespace PhotoStudioApp.Views
                     addServiceID = atributeService.ID;
                 }
 
-                HistoryPointsReceived historyPointsReceived = new();
+                HistoryPointsReceivedDTO historyPointsReceived = new();
 
                 if (tbCountPoints.IsEnabled)
                 {
@@ -198,8 +200,7 @@ namespace PhotoStudioApp.Views
                         Date = DateTime.Now.Date
                     };
 
-                    context.HistoryPoints.Add(historyPointsReceived);
-                    context.SaveChanges();
+                    await historyPointsReceivedApi.Create(historyPointsReceived);
                 }
 
                 historyPointsReceived = new()
@@ -209,15 +210,13 @@ namespace PhotoStudioApp.Views
                     Type = TypeAdmission.Поступление,
                     Date = DateTime.Now.Date
                 };
-
-                context.HistoryPoints.Add(historyPointsReceived);
-                context.SaveChanges();
+                await historyPointsReceivedApi.Create(historyPointsReceived);
 
                 _customer.Balance += bonusSum;
                 Message.Info($"Вам было начислено: {bonusSum} бонусов!");
 
-                context.Customers.Update(_customer);
-                context.SaveChanges();
+                var customerDTO = ConvertToDTO.ToCustomerDTO( _customer );
+                await customerApiService.Update(customerDTO);
 
                 //Инициализации новой брони
                 Booking booking = new()
@@ -232,7 +231,9 @@ namespace PhotoStudioApp.Views
                     DateBooking = date.Date
                 };
 
-                repositoryBooking.Create(booking);
+                var bookingDTO = ConvertToDTO.ToBookingDTO(booking);
+                await bookingApiService.Create(bookingDTO);
+
                 var payment = PaymentMethodBox.SelectedItem as ComboBoxItem;
 
                 //Присваиваем значение method способ оплаты через Enum
@@ -249,14 +250,14 @@ namespace PhotoStudioApp.Views
                     PaymentDate = DateTime.Now,
                 };
 
-                repositoryPayment.Create(paymentNew);
+                var paymentDTO = ConvertToDTO.ToPaymentsDTO(paymentNew);
+                await paymentsApiService.Create(paymentDTO);
 
                 var mainService = ServicesComboBox.SelectedItem as Services;
                 var additionalService = AdditionalServicesCombobox.SelectedItem as AdditionalService;
                 CreateFile.CreatePdfReceipt(_customer, mainService, additionalService, booking, hall);
 
                 Message.Success("Успешно!");
-
                 CloseButton?.Invoke(this,e);
             }
         }
@@ -294,7 +295,7 @@ namespace PhotoStudioApp.Views
             }
         }
 
-        private void tbCountPoints_TextChanged(object sender, TextChangedEventArgs e)
+        private async void tbCountPoints_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (_customer == null) return;
             if (!int.TryParse(tbCountPoints.Text, out int bonus) || bonus == 0)

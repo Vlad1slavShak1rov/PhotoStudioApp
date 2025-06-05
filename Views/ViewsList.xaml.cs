@@ -1,6 +1,7 @@
 ﻿using PhotoStudioApp.Database.DAL;
 using PhotoStudioApp.Database.DBContext;
 using PhotoStudioApp.Model;
+using PhotoStudioApp.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,18 +31,17 @@ namespace PhotoStudioApp.Views
         {
             InitializeComponent();
             currentUser = user;
-            InitData();
+            _ = InitData();
         }
 
-        private void InitData()
+        private async Task InitData()
         {
             if(reviewList != null) reviewList.Clear();
             MainPanel.Children.Clear();
-            
-            using var context = new MyDBContext();
-            RepositoryReview repositoryReview = new(context);
 
-            reviewList = repositoryReview.GetAll();
+            ReviewApiService reviewApi = new();
+
+            reviewList = await reviewApi.GetAll();
             LoadReviewCards(reviewList);
         }
 
@@ -60,9 +60,9 @@ namespace PhotoStudioApp.Views
         //При закрытии UserControl с созданием отзыва
         //Отписываемся от события CloseControl
         //И освобождаем память submitView
-        private void SubmitView_CloseControl(object? sender, EventArgs e)
+        private async void SubmitView_CloseControl(object? sender, EventArgs e)
         {
-            InitData();
+            await InitData();
             FilteredComboBox.SelectedIndex = 0;
 
             MainScrollViewer.Visibility = Visibility.Visible;
