@@ -40,6 +40,7 @@
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="0" Background="{StaticResource Panel}" HorizontalAlignment="Stretch">
+                <Label x:Name="lbBalance" Content="Баллы:" Foreground="{StaticResource Text}" FontSize="22" FontWeight="DemiBold"/>
                 <Grid HorizontalAlignment="Center" Margin="150 0 0 0">
                     <StackPanel Margin="0 0 450 0" HorizontalAlignment="Center">
                         <Button Name="CreateOrderButton" Height="60" Width="60" Margin="0 -1 0 -15" BorderBrush="{x:Null}" Style="{StaticResource ButtonOpacity}" Click="CreateOrderButton_Click">
@@ -76,6 +77,16 @@
                             </Button.Background>
                         </Button>
                         <TextBlock Text="Отзывы" HorizontalAlignment="Center" Foreground="{StaticResource Text}" FontSize="14" FontWeight="DemiBold"/>
+                    </StackPanel>
+
+                    <StackPanel Margin="350 0 0 0">
+                        <Button x:Name="btHistoryPoint" HorizontalAlignment="Center" Height="36" Width="39" Margin="0 9 0 0" BorderBrush="{x:Null}" Style="{StaticResource ButtonOpacity}" Click="btHistoryPoint_Click">
+                            <Button.Background>
+                                <ImageBrush ImageSource="/Resources/Pictures/moneyIco.png"/>
+                            </Button.Background>
+                        </Button>
+                        <TextBlock Text="Бонусы" HorizontalAlignment="Center" Foreground="{StaticResource Text}" FontSize="14" FontWeight="DemiBold"/>
+
                     </StackPanel>
                 </Grid>
 

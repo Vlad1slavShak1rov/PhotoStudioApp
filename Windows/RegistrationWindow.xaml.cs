@@ -2,6 +2,7 @@
 using PhotoStudioApp.Database.DBContext;
 using PhotoStudioApp.Helper;
 using PhotoStudioApp.Model;
+using PhotoStudioApp.Service;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -37,52 +38,66 @@ namespace PhotoStudioApp.Windows
             this.Close();
         }
 
-        private void SingUpButton_Click(object sender, RoutedEventArgs e)
+        private async void SingUpButton_Click(object sender, RoutedEventArgs e)
         {
-            if (Validator.IsNotNullOrWhiteSpace(NameBox.Text, SecondName.Text, LastName.Text, ContactBox.Text, LoginBox.Text, PasswordBoxOne.Password, PasswordBoxTwo.Password))
+            SingUpButton.IsEnabled = false;
+            SignUpButton.IsEnabled = false;
+            try
             {
-                if(PasswordBoxOne.Password == PasswordBoxTwo.Password)
+                if (Validator.IsNotNullOrWhiteSpace(NameBox.Text, SecondName.Text, LastName.Text, ContactBox.Text, LoginBox.Text, PasswordBoxOne.Password, PasswordBoxTwo.Password))
                 {
-                    if (PasswordBoxOne.Password.Length < 8)
+                    if (PasswordBoxOne.Password == PasswordBoxTwo.Password)
                     {
-                        Message.Warning("Пароль должен состоять хотя бы из 8 символов");
-                        return;
-                    }
-
-                    using var context = new MyDBContext();
-                    RepositoryUser repositoryUser = new(context);
-                    RepositoryCustomer repositoryCustomer = new(context);
-
-                    var user = repositoryUser.GetByLogin(LoginBox.Text);
-                    if(user == null)
-                    {
-                        user = new()
+                        if (PasswordBoxOne.Password.Length < 8)
                         {
-                            Login = LoginBox.Text,
-                            Password = PasswordBoxOne.Password,
-                            Role = Enums.Role.Customer
-                        };
-                        repositoryUser.Create(user);
+                            Message.Warning("Пароль должен состоять хотя бы из 8 символов");
+                            return;
+                        }
 
-                        Customer customer = new()
+                        UserApiService userApi = new();
+                        CustomerApiService customerApi = new();
+
+                        var user = await userApi.GetByLogin(LoginBox.Text);
+                        if (user == null)
                         {
-                            Name = NameBox.Text,
-                            UserID = user.ID,
-                            SecondName = SecondName.Text,
-                            LastName = LastName.Text,
-                            Contact = ContactBox.Text
-                        };
-                        repositoryCustomer.Create(customer);
-                        MainWindow mainWindow = new(user);
-                        mainWindow.Show();
-                        this.Close();
-                        Message.Success("Успешно!");
+                            UserDTO userDTO = new()
+                            {
+                                Login = LoginBox.Text,
+                                Password = PasswordBoxOne.Password,
+                                Role = Enums.Role.Customer
+                            };
+                            await userApi.Create(userDTO);
+
+                            CustomerDTO customerDTO = new()
+                            {
+                                Name = NameBox.Text,
+                                UserID = user.ID,
+                                SecondName = SecondName.Text,
+                                LastName = LastName.Text,
+                                Contact = ContactBox.Text
+                            };
+
+                            await customerApi.Create(customerDTO);
+                            MainWindow mainWindow = new(user);
+                            mainWindow.Show();
+                            this.Close();
+                            Message.Success("Успешно!");
+                        }
+                        else Message.Warning("Пользователь с таким логином уже зарегистрировался!");
                     }
-                    else Message.Warning("Пользователь с таким логином уже зарегистрировался!");
+                    else Message.Warning("У вас введены разные пароли!");
                 }
-                else Message.Warning("У вас введены разные пароли!");
+                else Message.Warning("У вас есть незаполненные поля!");
             }
-            else Message.Warning("У вас есть незаполненные поля!");
+            catch(Exception ex)
+            {
+                Message.Warning(ex.Message);
+            }
+            finally
+            {
+                SingUpButton.IsEnabled = true;
+                SignUpButton.IsEnabled = true;
+            }
         }
     }
 }

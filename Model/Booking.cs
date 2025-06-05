@@ -38,6 +38,9 @@ namespace PhotoStudioApp.Model
         public virtual Worker Visagiste { get; set; }  
         public virtual Hall Hall { get; set; }
         public virtual Services Services { get; set; }
-        public virtual AdditionalService AdditionalService { get; set; }
+        public virtual List<AdditionalService> AdditionalService { get; set; }
+        public virtual Review Review { get; set; }
+
+         public virtual Payment Payment { get; set; }
     }
 }

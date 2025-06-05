@@ -1,11 +1,15 @@
-﻿using PhotoStudioApp.Database.DAL;
+﻿using Microsoft.Win32;
+using PdfSharp.Drawing;
+using PdfSharp.Pdf;
+using PdfSharp.UniversalAccessibility.Drawing;
+using PhotoStudioApp.Database.DAL;
 using PhotoStudioApp.Database.DBContext;
 using PhotoStudioApp.Enums;
 using PhotoStudioApp.Helper;
-using PhotoStudioApp.Migrations;
 using PhotoStudioApp.Model;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +22,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PhotoStudioApp.Views
 {
@@ -27,12 +32,25 @@ namespace PhotoStudioApp.Views
     public partial class CreateBooking : UserControl
     {
         private User _user;
+        private Customer _customer;
         int sum = 0;
+        int bonusSum = 0;
         public event EventHandler CloseButton; //События для того, чтобы закрыть UserControl
         public CreateBooking(User user)
         {
             InitializeComponent();
             _user = user;
+            using (var context = new MyDBContext())
+            {
+                RepositoryCustomer repositoryCustomer = new(context);
+                _customer = repositoryCustomer.GetByUserID(_user.ID);
+                if(_customer.Balance == 0)
+                {
+                    selectedBonusPay.IsEnabled = false;
+                    rbNoUse.IsEnabled = false;
+                }
+            }
+           
             InitData();
             this.Loaded +=(e,s) => ServicesComboBox.SelectionChanged += AllCombobox_SelectionChanged;
             this.Loaded += (e, s) => AdditionalServicesCombobox.SelectionChanged += AllCombobox_SelectionChanged;
@@ -60,7 +78,7 @@ namespace PhotoStudioApp.Views
         }
 
         //Мы используем обобщение чтобы метод мог принимать
-        //списки разных типо
+        //списки разных типы
         private void InitComboBox<T>(ComboBox comboBox, List<T> list)
         {
 
@@ -107,6 +125,7 @@ namespace PhotoStudioApp.Views
                     if (ServicesComboBox.SelectedItem is Services service)
                     {
                         sum = service.CostService;
+                        bonusSum = service.BonusCost;
                     }
                 }
                 else if (ServicesComboBox.SelectedIndex == 0) //если выбрана только дополнительная услуга
@@ -114,13 +133,15 @@ namespace PhotoStudioApp.Views
                     if (AdditionalServicesCombobox.SelectedItem is AdditionalService additional)
                     {
                         sum = (int)additional.Cost;
+                        bonusSum = additional.BonusCost;
                     }
                 }
-                else //если выбрана основная услуга и дополнителньая услуга
+                else //если выбрана основная услуга и дополнительная услуга
                 {
                     if (AdditionalServicesCombobox.SelectedItem is AdditionalService additional && ServicesComboBox.SelectedItem is Services service)
                     {
                         sum = (int)additional.Cost + service.CostService;
+                        bonusSum = additional.BonusCost + service.BonusCost;
                     }
                 }
                 AmountBlock.Text = $"Итого: {sum} р";
@@ -139,31 +160,69 @@ namespace PhotoStudioApp.Views
             var visagiste = VisagisteCombobox.SelectedItem as Worker;
             var hall = HallComboBox.SelectedItem as Hall;
             var services = ServicesComboBox.SelectedItem as Services;
-            var duration = DateBookingBox.Text;
+            if(DateBookingBox.SelectedDate == null)
+            {
+                MessageBox.Show("Выберите дату для бронирования!");
+                return;
+            }
+            var date = DateBookingBox.SelectedDate.Value;
             var cost = sum;
 
-            if (DateTime.TryParse(duration,out DateTime date))
+            if (date <= DateTime.Now.Date)
             {
-                if(date <= DateTime.Now.Date)
-                {
-                    Message.Warning("Дата бронирования должна быть больше текущей!");
-                    return;
-                }
+                Message.Warning("Дата бронирования должна быть больше текущей!");
+                return;
             }
 
             if (photograph != null && visagiste != null && hall != null && services != null)
             {
                 int? addServiceID = null;
-                var customer = repositoryCustomer.GetByUserID(_user.ID);
+                
                 if (AdditionalServicesCombobox.SelectedItem is AdditionalService atributeService)
                 {
                     addServiceID = atributeService.ID;
                 }
 
+                HistoryPointsReceived historyPointsReceived = new();
+
+                if (tbCountPoints.IsEnabled)
+                {
+                    int bonus = int.Parse(tbCountPoints.Text);
+                    _customer.Balance -= bonus;
+
+                    historyPointsReceived = new()
+                    {
+                        CustomerID = _customer.ID,
+                        Point = bonus,
+                        Type = TypeAdmission.Потрачено,
+                        Date = DateTime.Now.Date
+                    };
+
+                    context.HistoryPoints.Add(historyPointsReceived);
+                    context.SaveChanges();
+                }
+
+                historyPointsReceived = new()
+                {
+                    CustomerID = _customer.ID,
+                    Point = bonusSum,
+                    Type = TypeAdmission.Поступление,
+                    Date = DateTime.Now.Date
+                };
+
+                context.HistoryPoints.Add(historyPointsReceived);
+                context.SaveChanges();
+
+                _customer.Balance += bonusSum;
+                Message.Info($"Вам было начислено: {bonusSum} бонусов!");
+
+                context.Customers.Update(_customer);
+                context.SaveChanges();
+
                 //Инициализации новой брони
                 Booking booking = new()
                 {
-                    CustomerID = customer.ID,
+                    CustomerID = _customer.ID,
                     PhotographID = photograph.ID,
                     VisagisteID = visagiste.ID,
                     HallID = hall.ID,
@@ -192,10 +251,77 @@ namespace PhotoStudioApp.Views
 
                 repositoryPayment.Create(paymentNew);
 
+                var mainService = ServicesComboBox.SelectedItem as Services;
+                var additionalService = AdditionalServicesCombobox.SelectedItem as AdditionalService;
+                CreateFile.CreatePdfReceipt(_customer, mainService, additionalService, booking, hall);
+
                 Message.Success("Успешно!");
 
                 CloseButton?.Invoke(this,e);
             }
+        }
+
+        private void rbNoUse_Checked(object sender, RoutedEventArgs e)
+        {
+            if (rbYesUse == null || rbNoUse == null) return;
+
+            if (rbNoUse.IsChecked == true)
+            {
+                rbYesUse.IsChecked = false;
+                tbCountPoints.IsEnabled = false;
+                tbCountPoints.Text = "0";
+
+                AllCombobox_SelectionChanged(null, null);
+            }
+        }
+
+        private void rbYesUse_Checked(object sender, RoutedEventArgs e)
+        {
+            if (rbYesUse == null || rbNoUse == null) return;
+
+            if (rbYesUse.IsChecked == true)
+            {
+                rbNoUse.IsChecked = false;
+                tbCountPoints.IsEnabled = true;
+            }
+        }
+
+        private void tbCountPoints_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            if (!char.IsDigit(e.Text, 0))
+            {
+                e.Handled = true; 
+            }
+        }
+
+        private void tbCountPoints_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (_customer == null) return;
+            if (!int.TryParse(tbCountPoints.Text, out int bonus) || bonus == 0)
+            {
+                AllCombobox_SelectionChanged(null,null);
+                return;
+            }
+
+            if (bonus > _customer.Balance)
+            {
+                MessageBox.Show("У вас нет такого количества баллов!");
+                tbCountPoints.Text = string.Empty;
+                return;
+            }
+
+            string currentAmount = AmountBlock.Text.Trim().Split(':')[1];
+            currentAmount = currentAmount.Remove(currentAmount.Length - 1);
+            // Извлечение текущей суммы
+            if (!int.TryParse(currentAmount, out int amount))
+            {
+                MessageBox.Show("Ошибка в текущей сумме!");
+                return;
+            }
+
+            // Вычисление новой суммы
+            int newAmount = amount - bonus * 5;
+            AmountBlock.Text = newAmount < 0 ? "Итого: 0 р" : "Итого:" + newAmount.ToString() + " р";
         }
     }
 }

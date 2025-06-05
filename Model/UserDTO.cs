@@ -8,16 +8,13 @@ using System.Threading.Tasks;
 
 namespace PhotoStudioApp.Model
 {
-    public class User
+    public class UserDTO
     {
-        [Key]
         public int ID { get; set; }
         [Required]
         public string Login { get; set; }
         [Required]
         public string Password { get; set; }
-        public Role Role { get; set; } = Role.Customer;
-        public virtual Customer Customer { get; set; }
-        public virtual Worker Worker { get; set; }
+        public Role Role { get; set; }
     }
 }

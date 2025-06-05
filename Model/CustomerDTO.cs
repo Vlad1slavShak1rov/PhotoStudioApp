@@ -3,27 +3,19 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace PhotoStudioApp.Model
 {
-    public class Customer
+    public class CustomerDTO
     {
-        [Key]
         public int ID { get; set; }
-        [ForeignKey("User")]
         public int UserID { get; set; }
         public string Name { get; set; }
         public string SecondName { get; set; }
         public string LastName { get; set; }
-        [Required]
         public string Contact { get; set; }
         public int Balance { get; set; } = 0;
-        public virtual User User { get; set; }
-        public virtual List<Booking> Bookings { get; set; }
-        public virtual List<Review> Reviews { get; set; }
-        public virtual List<HistoryPointsReceived> HistoryPoints { get; set; } = new();
     }
 }

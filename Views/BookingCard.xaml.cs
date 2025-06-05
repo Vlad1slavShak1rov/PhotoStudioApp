@@ -1,6 +1,8 @@
 ﻿using PhotoStudioApp.Database.DAL;
 using PhotoStudioApp.Database.DBContext;
+using PhotoStudioApp.Helper;
 using PhotoStudioApp.Model;
+using PhotoStudioApp.Service;
 using System;
 using System.Collections.Generic;
 using System.DirectoryServices.ActiveDirectory;
@@ -25,6 +27,11 @@ namespace PhotoStudioApp.Views
     public partial class BookingCard : UserControl
     {
         private Booking _currentBooking;
+        private Services mainService;
+        private AdditionalService additionalService;
+        private Customer _customer;
+        private Hall _hall;
+
         private Grid _mainGrid;
         private EditBooking editBooking;
         public event EventHandler Update;
@@ -37,33 +44,33 @@ namespace PhotoStudioApp.Views
         }
 
         //Инициализация карточки с заказами текущего клиента
-        private void InitData(Booking booking, bool IsAdmin)
+        private async void InitData(Booking booking, bool IsAdmin)
         {
             BookingCardExpander.Header = $"Запись на {booking.DateBooking}";
 
-            using var context = new MyDBContext();
-            RepositoryWorker repositoryWorker = new(context);
-            RepositoryHall repositoryHall = new(context);
-            RepositoryAdditionalService repositoryAdditionalService = new(context);
-            RepositoryServices repositoryServices = new(context);
+            WorkerApiService workerApiService = new();
+            HallApiService hallApiService = new();
+            AdditionalServiceApi additionalServiceApi = new();
+            ServiceApiService serviceApiService = new();
+            CustomerApiService customerApiService = new();
 
-            var photograph = repositoryWorker.GetByIDPhotograph(booking.PhotographID);
-            var visagiste = repositoryWorker.GetByIDVisagiste(booking.VisagisteID);
-            var hall = repositoryHall.GetByID(booking.HallID);
-            var service = repositoryServices.GetByID(booking.ServiceID);
-            AdditionalService addService = null;
+            _customer = await customerApiService.GetById(booking.CustomerID);
+            var photograph = await workerApiService.GetByPhotograph(booking.PhotographID);
+            var visagiste = await workerApiService.GetByVisagiste(booking.VisagisteID);
+            _hall = await hallApiService.GetById(booking.HallID);
+            mainService = await serviceApiService.GetById(booking.ServiceID);
 
             int? addServiceID = booking.AdditionalServicesID;
-            if(addServiceID != null) addService = repositoryAdditionalService.GetByID(addServiceID!.Value);
+            if(addServiceID != null) additionalService = await additionalServiceApi.GetById(addServiceID!.Value);
 
             PhotographLabel.Content = $"Фотограф: {photograph.Name} {photograph.LastName}";
             VisagisteLabel.Content = $"Визажист: {visagiste.Name} {visagiste.LastName}";
-            ServiceLabel.Content = $"Услуга: {service.ServiceName}";
+            ServiceLabel.Content = $"Услуга: {mainService.ServiceName}";
 
-            if (addService != null) AddServiceLabel.Content = $"Дополнителньая услуга: {addService.ServiceName}";
+            if (additionalService != null) AddServiceLabel.Content = $"Дополнителньая услуга: {additionalService.ServiceName}";
             else AddServiceLabel.Content = $"Дополнителньая услуга: Не выбрана";
 
-            HallLabel.Content = $"Холл: {hall.Description}";
+            HallLabel.Content = $"Холл: {_hall.Description}";
             CostLabel.Content = $"Стоимость: {booking.CostServices}";
 
             //Показываем или прячем кнопки администратора
@@ -88,6 +95,11 @@ namespace PhotoStudioApp.Views
             editBooking.Close -= EditBooking_Close;
             editBooking = null;
             Update?.Invoke(this, e);
+        }
+
+        private void btCreateReceipt_Click(object sender, RoutedEventArgs e)
+        {
+            CreateFile.CreatePdfReceipt(_customer, mainService, additionalService, _currentBooking, _hall);
         }
     }
 }

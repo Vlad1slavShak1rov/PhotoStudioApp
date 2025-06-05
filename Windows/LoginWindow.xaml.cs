@@ -3,6 +3,7 @@ using PhotoStudioApp.Database.DBContext;
 using PhotoStudioApp.Helper;
 using PhotoStudioApp.Model;
 using PhotoStudioApp.Windows;
+using PhotoStudioApp.Service;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -33,72 +34,86 @@ public partial class LoginWindow : Window
         this.Close();
     }
 
-    private void SingInButton_Click(object sender, RoutedEventArgs e)
+    private async void SingInButton_Click(object sender, RoutedEventArgs e)
     {
-        if (!string.IsNullOrEmpty(LoginBox.Text) && !string.IsNullOrEmpty(PasswordBox.Password))
+        SingInButton.IsEnabled = false;
+        SignUpButton.IsEnabled = false;
+        LoginBox.IsEnabled = false;
+        PasswordBox.IsEnabled = false;
+        try
         {
-            string login = LoginBox.Text;
-            string password = PasswordBox.Password;
-
-            using var context = new MyDBContext(); 
-            RepositoryUser repositoryUser = new(context); 
-
-            var user = repositoryUser.GetByLogin(login);
-            if(user != null)
+            if (!string.IsNullOrEmpty(LoginBox.Text) && !string.IsNullOrEmpty(PasswordBox.Password))
             {
-                if(user.Password == password)
+                string login = LoginBox.Text;
+                string password = PasswordBox.Password;
+                UserApiService userApiService = new();
+
+                var user = await userApiService.GetByLogin(login);
+                if (user != null)
                 {
-                    //Проверка, если роль пользователя равна роли рабочего
-                    if ((Enums.Role)user.Role == Enums.Role.Worker)
+                    if (user.Password == password)
                     {
-                        RepositoryCustomer repositoryCustomer = new(context);
-                        RepositoryWorker repositoryWorker = new(context);
-
-                        var customer = repositoryCustomer.GetByUserID(user.ID);
-                        if(customer != null)
+                        CustomerApiService customerApiService = new();
+                        //Проверка, если роль пользователя равна роли рабочего
+                        if ((Enums.Role)user.Role == Enums.Role.Worker)
                         {
-                            Worker worker = repositoryWorker.GetByUserID(user.ID);// проверяем зарегистрирован ли рабочий с таким ID
-
-                            if(worker == null) //Если не зарегистрирован
+                            WorkerApiService workerApiService = new();
+                            var customer = await customerApiService.GetByUserId(user.ID);
+                            if (customer != null)
                             {
-                                worker = new()
+                                Worker worker = await workerApiService.GetByUserId(user.ID);// проверяем зарегистрирован ли рабочий с таким ID
+
+                                if (worker == null) //Если не зарегистрирован
                                 {
-                                    Name = customer.Name,
-                                    LastName = customer.LastName,
-                                    SecondName = customer.SecondName,
-                                    Post = Enums.Post.Photograph, //Роль рабочего можно поменять в бд
-                                    User = user,
-                                };
-                                repositoryWorker.Create(worker);
-                                repositoryCustomer.Delete(customer.ID);
+                                    var workerDTO = new WorkerDTO()
+                                    {
+                                        Name = customer.Name,
+                                        LastName = customer.LastName,
+                                        SecondName = customer.SecondName,
+                                        Post = Enums.Post.Photograph,
+                                        UserID = user.ID
+                                    };
+                                    await workerApiService.Create(workerDTO);
+                                    await customerApiService.DeleteById(customer.ID);
+                                }
                             }
                         }
-                    }
-                    //Проверка, если роль пользователя равна роли Админа
-                    else if ((Enums.Role)user.Role == Enums.Role.Admin)
-                    {
-                        RepositoryCustomer repositoryCustomer = new(context);
-                        var customer = repositoryCustomer.GetByUserID(user.ID);
-                        if (customer != null) repositoryCustomer.Delete(customer.ID);
-                    }
+                        //Проверка, если роль пользователя равна роли Админа
+                        else if ((Enums.Role)user.Role == Enums.Role.Admin)
+                        {
+                            var customer = await customerApiService.GetByUserId(user.ID);
+                            if (customer != null) await customerApiService.DeleteById(customer.ID);
+                        }
 
-                    Message.Success("Успешно!");
-                    MainWindow mainWindow = new(user);
-                    mainWindow.Show();
-                    this.Close();
+                        Message.Success("Успешно!");
+                        MainWindow mainWindow = new(user);
+                        mainWindow.Show();
+                        this.Close();
+                    }
+                    else
+                    {
+                        Message.Warning("Неверный пароль");
+                        return;
+                    }
                 }
                 else
                 {
-                    Message.Warning("Неверный пароль");
+                    Message.Warning("Такого пользователя не существует!");
                     return;
                 }
             }
-            else
-            {
-                Message.Warning("Такого пользователя не существует!");
-                return;
-            }
+            else Message.Warning("У вас есть незаполненные поля!");
         }
-        else Message.Warning("У вас есть незаполненные поля!");
+        catch (Exception ex)
+        {
+            Message.Warning(ex.Message);
+        }
+        finally
+        {
+            SingInButton.IsEnabled = true;
+            LoginBox.IsEnabled = true;
+            PasswordBox.IsEnabled = true;
+            SignUpButton.IsEnabled = false;
+        }
     }
 }

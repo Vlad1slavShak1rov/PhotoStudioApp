@@ -22,14 +22,14 @@ namespace PhotoStudioApp.Database.DBContext
         public DbSet<Services> Services { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Worker> Workers { get; set; }
-
+        public DbSet<HistoryPointsReceived> HistoryPoints { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Booking>()
-                .HasOne(b => b.Photograph)
-                .WithMany()
-                .HasForeignKey(b => b.PhotographID)
-                .OnDelete(DeleteBehavior.NoAction);
+               .HasOne(b => b.Photograph)
+               .WithMany()
+               .HasForeignKey(b => b.PhotographID)
+               .OnDelete(DeleteBehavior.NoAction); 
 
             modelBuilder.Entity<Booking>()
                 .HasOne(b => b.Visagiste)
@@ -37,41 +37,50 @@ namespace PhotoStudioApp.Database.DBContext
                 .HasForeignKey(b => b.VisagisteID)
                 .OnDelete(DeleteBehavior.NoAction);
 
+
             modelBuilder.Entity<Booking>()
-                .HasOne(b => b.Customer)
+                .HasOne(b => b.Visagiste)
                 .WithMany()
-                .HasForeignKey(b => b.CustomerID)
-                .OnDelete(DeleteBehavior.NoAction);
+                .HasForeignKey(b => b.VisagisteID)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Booking>()
                 .HasOne(b => b.Hall)
-                .WithMany()
+                .WithMany(h => h.Bookings)
                 .HasForeignKey(b => b.HallID)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Booking>()
                 .HasOne(b => b.Services)
                 .WithMany()
                 .HasForeignKey(b => b.ServiceID)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Booking>()
                 .HasOne(b => b.AdditionalService)
                 .WithMany()
                 .HasForeignKey(b => b.AdditionalServicesID)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Review>()
                 .HasOne(r => r.Customer)
-                .WithMany()
+                .WithMany(c => c.Reviews)
                 .HasForeignKey(r => r.CustomerID)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Restrict);
+
+        
+
+            modelBuilder.Entity<Worker>()
+                .HasOne(w => w.User)
+                .WithOne(u => u.Worker)
+                .HasForeignKey<Worker>(w => w.UserID)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Review>()
                 .HasOne(r => r.Booking)
-                .WithMany()
-                .HasForeignKey(r => r.BookingID)
-                .OnDelete(DeleteBehavior.NoAction);
+                .WithOne(r => r.Review)
+                .HasForeignKey<Review>(r => r.BookingID)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

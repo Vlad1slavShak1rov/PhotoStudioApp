@@ -38,29 +38,25 @@
             <StackPanel Margin="5">
                 <TextBlock Text="Услуга" FontSize="22" Foreground="{DynamicResource BackgroundColor}" HorizontalAlignment="Center" FontWeight="Bold"/>
                 <ComboBox Name="ServicesComboBox" Width="250" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource add}" Background="{DynamicResource add}" SelectedIndex="0">
-                    <ComboBoxItem Content="Не выбран"/>
+                    <ComboBoxItem Content="Без услуги"/>
                 </ComboBox>
+
             </StackPanel>
 
             <StackPanel  Margin="5">
                 <TextBlock Text="Зал" FontSize="22" Foreground="{DynamicResource BackgroundColor}" HorizontalAlignment="Center" FontWeight="Bold"/>
-                <ComboBox Name="HallComboBox" Width="250" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource add}" Background="{DynamicResource add}" SelectedIndex="0">
-                    <ComboBoxItem Content="Не выбран"/>
-                </ComboBox>
+                <ComboBox Name="HallComboBox" Width="250" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource add}" Background="{DynamicResource add}" SelectedIndex="0"/>
             </StackPanel>
             
             <StackPanel Margin="5">
                 <TextBlock Text="Фотограф" FontSize="22" Foreground="{DynamicResource BackgroundColor}" HorizontalAlignment="Center" FontWeight="Bold"/>
-                <ComboBox Name="WorkerCombobox" Width="250" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource add}" Background="{DynamicResource add}" SelectedIndex="0">  
-                    <ComboBoxItem Content="Не выбран"/>
-                </ComboBox>
+                <ComboBox Name="WorkerCombobox" Width="250" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource add}" Background="{DynamicResource add}" SelectedIndex="0"/>
+
             </StackPanel>
 
             <StackPanel  Margin="5">
                 <TextBlock Text="Визажист" FontSize="22" Foreground="{DynamicResource BackgroundColor}" HorizontalAlignment="Center" FontWeight="Bold"/>
-                <ComboBox Name="VisagisteCombobox" Width="250" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource add}" Background="{DynamicResource add}" SelectedIndex="0">
-                    <ComboBoxItem Content="Без визажиста"/>
-                </ComboBox>
+                <ComboBox Name="VisagisteCombobox" Width="250" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource add}" Background="{DynamicResource add}" SelectedIndex="0"/>
             </StackPanel>
 
             <StackPanel  Margin="5">
@@ -72,7 +68,7 @@
 
             <StackPanel  Margin="5">
                 <TextBlock Text="Дата бронирования" FontSize="22" Foreground="{DynamicResource BackgroundColor}" HorizontalAlignment="Center" FontWeight="Bold"/>
-                <TextBox Name="DateBookingBox" Width="250"  FontSize="18" FontWeight="Bold" Foreground="{DynamicResource Text}" Height="30"/>
+                <DatePicker Name="DateBookingBox" Width="250"  FontSize="18" FontWeight="Bold" Foreground="{DynamicResource Text}" Height="30"/>
             </StackPanel>
         </StackPanel>
 
@@ -85,7 +81,14 @@
                     <ComboBoxItem Content="Наличными"/>
                     <ComboBoxItem Content="Безналичными"/>
                 </ComboBox>
-                <TextBlock Name="AmountBlock" Text="Итого: 0.0р" Margin="0 100 0 0" FontSize="30" Foreground="{DynamicResource BackgroundColor}" HorizontalAlignment="Left" FontWeight="Bold"/>
+
+                <StackPanel x:Name ="selectedBonusPay" Orientation="Vertical" Margin="0 20 0 0">
+                    <RadioButton x:Name ="rbYesUse" Content="Использовать баллы" Margin="0 10" FontSize="12" Foreground="{DynamicResource BackgroundColor}" FontWeight="Bold" IsChecked="True" Checked="rbYesUse_Checked"/>
+                    <RadioButton x:Name ="rbNoUse" Content="Не использовать баллы" FontSize="12" Foreground="{DynamicResource BackgroundColor}" FontWeight="Bold" IsChecked="False" Checked="rbNoUse_Checked"/>
+                    <TextBox x:Name ="tbCountPoints" Text="0" Width="50" FontSize="16" FontWeight="Bold" Margin="0 10 0 0" HorizontalAlignment="Left" TextChanged="tbCountPoints_TextChanged" PreviewTextInput="tbCountPoints_PreviewTextInput"/>
+                </StackPanel>
+
+                    <TextBlock Name="AmountBlock" Text="Итого: 0.0р" Margin="0 70 0 0" FontSize="30" Foreground="{DynamicResource BackgroundColor}" HorizontalAlignment="Left" FontWeight="Bold"/>
                 <Button Name="PayButton" Content="Оплатить"  Style="{StaticResource ButtonStyle}" Height="30" Click="PayButton_Click"/>
             </StackPanel>
         </StackPanel>

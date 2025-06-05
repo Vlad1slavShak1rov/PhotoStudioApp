@@ -38,6 +38,7 @@
                 <Label Content="Админ кнопки:" FontWeight="Bold" FontSize="16"/>
                 <Grid>
                     <Button x:Name="UpdateButton" Content="Изменить" Margin="0 0 20 0" HorizontalAlignment="Right" Click="UpdateButton_Click"/>
+                    <Button x:Name="btCreateReceipt" Content="Создать чек" Margin="0 0 120 0" HorizontalAlignment="Right" Click="btCreateReceipt_Click"/>
                 </Grid>
             </StackPanel>
 

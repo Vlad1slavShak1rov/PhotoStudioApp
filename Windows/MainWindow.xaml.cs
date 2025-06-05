@@ -1,4 +1,6 @@
-﻿using PhotoStudioApp.Model;
+﻿using PhotoStudioApp.Database.DBContext;
+using PhotoStudioApp.Model;
+using PhotoStudioApp.Service;
 using PhotoStudioApp.Views;
 using System;
 using System.Collections.Generic;
@@ -22,16 +24,29 @@ namespace PhotoStudioApp.Windows
     public partial class MainWindow : Window
     {
         private User _user;
+        private Customer _customer;
         private SettingsView settingsView;
         private CreateBooking createBooking;
+        private HistoryBonusView historyBonusView;
         public MainWindow(User user)
         {
             InitializeComponent();
             _user = user;
 
-            if ((Enums.Role)_user.Role == Enums.Role.Customer) CustomerGrid.Visibility = Visibility.Visible;
+            if ((Enums.Role)_user.Role == Enums.Role.Customer)
+            {
+                _ = InitCustomer();
+            }
             else if ((Enums.Role)_user.Role == Enums.Role.Worker) WorkerGrid.Visibility = Visibility.Visible;
             else AdminGrid.Visibility = Visibility.Visible;
+        }
+
+        private async Task InitCustomer()
+        {
+            CustomerGrid.Visibility = Visibility.Visible;
+            CustomerApiService customerApiService = new();
+            _customer = await customerApiService.GetByUserId(_user.ID);
+            lbBalance.Content = $"Ваш баланс: {_customer.Balance}";
         }
 
         private void ExitButton_Click(object sender, RoutedEventArgs e)
@@ -57,11 +72,13 @@ namespace PhotoStudioApp.Windows
         }
 
         //Освобождаем память
-        private void CreateBooking_CloseButton(object? sender, EventArgs e)
+        private async void CreateBooking_CloseButton(object? sender, EventArgs e)
         {
             createBooking.CloseButton -= CreateBooking_CloseButton;
             createBooking = null;
             MainGrid.Children.Clear();
+
+            await InitCustomer();
         }
         private void ListBookingButton_Click(object sender, RoutedEventArgs e)
         {
@@ -138,6 +155,23 @@ namespace PhotoStudioApp.Windows
             AdminMainPanel.Children.Clear();
             PaymentListView paymentList = new();
             AdminMainPanel.Children.Add(paymentList);
+        }
+
+        private void btHistoryPoint_Click(object sender, RoutedEventArgs e)
+        {
+            MainGrid.Children.Clear();
+            historyBonusView = new(_customer);
+            historyBonusView.HorizontalAlignment = HorizontalAlignment.Center;
+            historyBonusView.VerticalAlignment = VerticalAlignment.Top;
+            historyBonusView.BackClick += HistoryBonusView_BackClick;
+            MainGrid.Children.Add(historyBonusView);
+        }
+
+        private void HistoryBonusView_BackClick(object? sender, EventArgs e)
+        {
+            historyBonusView.BackClick -= HistoryBonusView_BackClick;
+            historyBonusView = null;
+            MainGrid.Children.Clear();
         }
     }
 }

@@ -24,4 +24,9 @@ namespace PhotoStudioApp.Enums
         Cards,
         Cash
     }
+    public enum TypeAdmission
+    {
+        Поступление,
+        Потрачено
+    }
 }

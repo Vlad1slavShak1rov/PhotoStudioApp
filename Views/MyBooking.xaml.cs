@@ -2,6 +2,7 @@
 using PhotoStudioApp.Database.DBContext;
 using PhotoStudioApp.Helper;
 using PhotoStudioApp.Model;
+using PhotoStudioApp.Windows;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,7 @@ namespace PhotoStudioApp.Views
     public partial class MyBooking : UserControl
     {
         private BookingCard bookingCard;
+        private List<Booking> bookings;
         public MyBooking(User user)
         {
             InitializeComponent();
@@ -46,9 +48,9 @@ namespace PhotoStudioApp.Views
             RepositoryReview repositoryReview = new(context);
 
             var customer = repositoryCustomer.GetByUserID(user.ID);
-            var bookingList = repositoryBooking.GetAllByCustomer(customer.ID);
+            bookings = repositoryBooking.GetAllByCustomer(customer.ID);
 
-            foreach(var booking in bookingList)
+            foreach(var booking in bookings)
             {
                 //Показываем MessageBox если время бронирования меньше, чем текущее время
                 if (booking.DateBooking < DateTime.Now && repositoryReview.GetByBookingID(booking.ID) == null)
@@ -102,17 +104,24 @@ namespace PhotoStudioApp.Views
         //Загрузка всего списка бронирования для администратора
         private void InitAll()
         {
+            btCreateTable.Visibility = Visibility.Visible;
             MainPanel.Children.Clear();
             using var context = new MyDBContext();
             RepositoryBooking repositoryBooking = new(context);
-            var bookingList = repositoryBooking.GetAll();
+            bookings = repositoryBooking.GetAll();
 
-            foreach (var booking in bookingList)
+            foreach (var booking in bookings)
             {
                 bookingCard = new(booking, true, MainGrid);
                 bookingCard.Update += BookingCard_Update;
                 MainPanel.Children.Add(bookingCard);
             }
+        }
+
+        private void btCreateTable_Click(object sender, RoutedEventArgs e)
+        {
+            CreateTableWindow createTableWindow = new(bookings);
+            createTableWindow.ShowDialog();
         }
     }
 }

@@ -9,28 +9,13 @@ using System.Threading.Tasks;
 
 namespace PhotoStudioApp.Model
 {
-    public class Worker
+    public class WorkerDTO
     {
-        [Key]
         public int ID { get; set; }
-        [ForeignKey("User")]
         public int UserID { get; set; }
-
         public string Name { get; set; }
-
         public string SecondName { get; set; }
-
         public string LastName { get; set; }
-        [Required]
         public Post Post { get; set; }
-        public string FullName
-        {
-            get
-            {
-                return $"{Name} {LastName}"; // Объединяем имя и фамилию
-            }
-        }
-        public virtual User User { get; set; }
-        public virtual Booking Booking { get; set; }
     }
 }

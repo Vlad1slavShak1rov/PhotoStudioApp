@@ -7,14 +7,10 @@ using System.Threading.Tasks;
 
 namespace PhotoStudioApp.Model
 {
-    public class Hall
+    public class HallDTO
     {
-        [Key]
         public int ID { get; set; }
-        [Required]
         public string Description { get; set; }
-        public bool IsBooking { get; set; } = false;
-
-        public virtual List<Booking> Bookings { get; set; }
+        public string? AvailableServices { get; set; }
     }
 }

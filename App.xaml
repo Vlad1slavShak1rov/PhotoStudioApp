@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:PhotoStudioApp"
              StartupUri="Windows/LoginWindow.xaml">
     <Application.Resources>
-         
+
     </Application.Resources>
 </Application>

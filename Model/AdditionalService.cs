@@ -13,13 +13,12 @@ namespace PhotoStudioApp.Model
         public int ID { get; set; }
 
         [Required]
-        [Length(0, 128)]
         public string ServiceName { get; set; }
-
-        [Length(0, 512)]
         public string Description { get; set; }
-
+        public int BonusCost { get; set; }
         [Required]
         public decimal Cost { get; set; }
+
+        public virtual List<Booking> Bookings { get; set; } = new();
     }
 }

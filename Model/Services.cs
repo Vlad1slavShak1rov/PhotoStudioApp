@@ -18,5 +18,8 @@ namespace PhotoStudioApp.Model
         [Required]
         public int CostService { get; set; }
 
+        public int BonusCost { get; set; }
+        public virtual Booking Booking { get; set; }
+
     }
 }
