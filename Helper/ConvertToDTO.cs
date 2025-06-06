@@ -83,6 +83,9 @@ namespace PhotoStudioApp.Helper
                 Name = worker.Name,
                 SecondName = worker.SecondName,
                 LastName = worker.LastName,
+                IsOnBookin = worker.IsOnBookin,
+                MyWorks = worker.MyWorks,
+                Post = worker.Post,
             };
         }
 
@@ -98,5 +101,17 @@ namespace PhotoStudioApp.Helper
                 ReviewText = review.ReviewText,
             };
         }
+
+        public static UserDTO ToUserDTO(User user)
+        {
+            return new UserDTO()
+            {
+                ID = user.ID,
+                Login = user.Login,
+                Password = user.Password,
+                Role = user.Role,
+            };
+        }
+
     }
 }

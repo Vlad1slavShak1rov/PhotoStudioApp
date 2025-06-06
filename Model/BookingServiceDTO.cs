@@ -12,8 +12,8 @@ namespace PhotoStudioApp.Model
     {
         public int ID { get; set; }
         public int CustomerID { get; set; }
-        public int PhotographID { get; set; }
-        public int VisagisteID { get; set; }
+        public int? PhotographID { get; set; }
+        public int? VisagisteID { get; set; }
         public int HallID { get; set; }
         public int ServiceID { get; set; }
         public DateTime DateBooking { get; set; }

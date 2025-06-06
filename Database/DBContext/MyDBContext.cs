@@ -68,8 +68,6 @@ namespace PhotoStudioApp.Database.DBContext
                 .HasForeignKey(r => r.CustomerID)
                 .OnDelete(DeleteBehavior.Restrict);
 
-        
-
             modelBuilder.Entity<Worker>()
                 .HasOne(w => w.User)
                 .WithOne(u => u.Worker)

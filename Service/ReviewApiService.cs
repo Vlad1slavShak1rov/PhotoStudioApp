@@ -27,7 +27,7 @@ namespace PhotoStudioApp.Service
         }
         public async Task<int> Create(ReviewDTO bookingServiceDTO)
         {
-            var res = await httpClient.PatchAsJsonAsync(BaseUrl, bookingServiceDTO);
+            var res = await httpClient.PostAsJsonAsync(BaseUrl, bookingServiceDTO);
             if (!res.IsSuccessStatusCode)
             {
                 System.Windows.MessageBox.Show(res.ReasonPhrase, "Ошибка");

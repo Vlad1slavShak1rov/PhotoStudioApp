@@ -27,6 +27,9 @@ namespace PhotoStudioApp.Views
     public partial class EditBooking : UserControl
     {
         private Booking _booking;
+        private Worker photograph = null;
+        private Worker visagiste = null;
+
         public event EventHandler Close;
         int sum = 0;
         public EditBooking(Booking booking)
@@ -77,8 +80,11 @@ namespace PhotoStudioApp.Views
             }
 
             //Получаем все модели, связанные в таблице Booking
-            var photograph = await workerApiService.GetByPhotograph(_booking.PhotographID);
-            var visagiste = await workerApiService.GetByVisagiste(_booking.VisagisteID);
+            if (_booking.PhotographID != null || _booking.VisagisteID != null)
+            {
+                photograph = await workerApiService.GetByPhotograph(_booking.PhotographID!.Value);
+                visagiste = await workerApiService.GetByVisagiste(_booking.VisagisteID!.Value);
+            }
             var hall = await hallApiService.GetById(_booking.HallID);
             var service = await serviceApiService.GetById(_booking.ServiceID);
             AdditionalService addService = null;
@@ -87,8 +93,8 @@ namespace PhotoStudioApp.Views
             if (addServiceID != null) addService = await additionalServiceApi.GetById(addServiceID!.Value);
 
             //Выводим текущие элементы выбранного бронирования
-            PhotographBox.SelectedItem = photograph;
-            VisagisteBox.SelectedItem = visagiste;
+            PhotographBox.SelectedItem = photograph == null ? null : photograph;
+            VisagisteBox.SelectedItem = visagiste == null ? null : visagiste;
             ServiceBox.SelectedItem = service;
             AddServiceBox.SelectedItem = addService;
             HallBox.SelectedItem = hall;
@@ -98,17 +104,40 @@ namespace PhotoStudioApp.Views
 
         private async void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            var photograph = PhotographBox.SelectedItem as Worker;
-            var visagiste = VisagisteBox.SelectedItem as Worker;
+            var selectedPhotograph = PhotographBox.SelectedItem as Worker;
+            var selectedVisagiste = VisagisteBox.SelectedItem as Worker;
             var hall = HallBox.SelectedItem as Hall;
             var service = ServiceBox.SelectedItem as Services;
             var addService = AddServiceBox.SelectedItem as AdditionalService;
             var cost = sum;
 
+            WorkerApiService workerApiService = new();
+
+            photograph.IsOnBookin = false;
+            visagiste.IsOnBookin = false;
+
+            var dto = ConvertToDTO.ToWorkerDTO(photograph);
+            await workerApiService.Update(dto);
+            dto = ConvertToDTO.ToWorkerDTO(visagiste);
+            await workerApiService.Update(dto);
+
+            if (selectedPhotograph != null)
+            {
+                selectedPhotograph.IsOnBookin = true;
+                dto = ConvertToDTO.ToWorkerDTO(selectedPhotograph);
+                await workerApiService.Update(dto);
+            }
+            if (selectedVisagiste != null)
+            {
+                selectedVisagiste.IsOnBookin = true;
+                dto = ConvertToDTO.ToWorkerDTO(selectedVisagiste);
+                await workerApiService.Update(dto);
+            }
+
             BookingApiService bookingApiService = new();
 
-            _booking.PhotographID = photograph.ID;
-            _booking.VisagisteID = visagiste.ID;
+            _booking.PhotographID = selectedPhotograph == null ? null : selectedPhotograph.ID;
+            _booking.VisagisteID = selectedVisagiste == null ? null : selectedVisagiste.ID;
             _booking.HallID = hall.ID;
             _booking.ServiceID = service.ID;
             _booking.AdditionalServicesID = addService.ID;
@@ -116,6 +145,7 @@ namespace PhotoStudioApp.Views
 
             var bookingDTO = ConvertToDTO.ToBookingDTO(_booking);
 
+          
             await bookingApiService.Update(bookingDTO);
             Message.Success("Успешно!");
 
@@ -129,35 +159,28 @@ namespace PhotoStudioApp.Views
 
         private void AddServiceBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (AddServiceBox.SelectedItem != null && ServiceBox.SelectedItem != null)
+            int total = 0;
+
+            // Учитываем стоимость зала
+            if (HallBox.SelectedItem is Hall hall)
             {
-                sum = 0;
-                if (AddServiceBox.SelectedIndex == 0) //если выбрана основная услуга
-                {
-                    if (ServiceBox.SelectedItem is Services service)
-                    {
-                        sum = service.CostService;
-                    }
-                }
-                else if (AddServiceBox.SelectedIndex == 0) //если выбрана только дополнительная услуга
-                {
-                    if (AddServiceBox.SelectedItem is AdditionalService additional)
-                    {
-                        sum = (int)additional.Cost;
-                    }
-                }
-                else //если выбрана основная услуга и дополнителньая услуга
-                {
-                    if (AddServiceBox.SelectedItem is AdditionalService additional && ServiceBox.SelectedItem is Services service)
-                    {
-                        sum = (int)additional.Cost + service.CostService;
-                    }
-                }
-                if(CostBox != null)
-                {
-                    CostBox.Text = $"Итого: {sum} р";
-                }
-            }  
+                total += (int)hall.Cost;
+            }
+
+            // Учитываем основную услугу
+            if (ServiceBox.SelectedItem is Services service)
+            {
+                total += service.CostService;
+            }
+
+            // Учитываем дополнительную услугу
+            if (AddServiceBox.SelectedItem is AdditionalService additional)
+            {
+                total += (int)additional.Cost;
+            }
+
+            sum = total;
+            CostBox.Text = sum.ToString();
         }
     }
 }

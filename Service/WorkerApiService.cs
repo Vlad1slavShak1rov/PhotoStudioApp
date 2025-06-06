@@ -1,4 +1,5 @@
-﻿using PhotoStudioApp.Model;
+﻿using Azure;
+using PhotoStudioApp.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,7 +35,19 @@ namespace PhotoStudioApp.Service
         public async Task<Worker> GetByUserId(int userId)
         {
             var url = $"{BaseUrl}/byUser/{userId}";
-            return await httpClient.GetFromJsonAsync<Worker>(url);
+            var res = await httpClient.GetAsync(url);
+            if (res.IsSuccessStatusCode)
+            {
+                return await httpClient.GetFromJsonAsync<Worker>(url);
+            }
+            
+            if(res.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return null;
+            }
+
+            res.EnsureSuccessStatusCode();
+            return null;
         }
         public async Task<Worker> GetByVisagiste(int id)
         {
@@ -49,15 +62,15 @@ namespace PhotoStudioApp.Service
 
         public async Task<int> Create(WorkerDTO entity)
         {
-            var res = await httpClient.PatchAsJsonAsync(BaseUrl, entity);
+            var res = await httpClient.PostAsJsonAsync(BaseUrl, entity);
             if (!res.IsSuccessStatusCode)
             {
                 System.Windows.MessageBox.Show(res.ReasonPhrase, "Ошибка");
                 return -1;
             }
 
-            var content = await res.Content.ReadFromJsonAsync<Dictionary<string, int>>();
-            return content["id"];
+            var id = await res.Content.ReadFromJsonAsync<int>();
+            return id;
         }
         public async Task<bool> Update(WorkerDTO entity)
         {

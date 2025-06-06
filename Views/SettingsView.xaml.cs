@@ -33,9 +33,12 @@ namespace PhotoStudioApp.Views
         {
             InitializeComponent();
             _currentUser = user;
-            _ = GetWorker();
-            _ = InitData();
-
+            LoadData();
+        }
+        private async void LoadData()
+        {
+            await GetWorker();
+            await InitData();
         }
 
         //Получаем сотрудника
@@ -88,6 +91,11 @@ namespace PhotoStudioApp.Views
 
             await workerApiService.Update(workerDTO);
             Message.Success("Успешно!");
+        }
+
+        private void SurnameTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !Validator.IsLetter(e.Text[0]);
         }
     }
 }

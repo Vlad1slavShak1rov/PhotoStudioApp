@@ -15,9 +15,9 @@ namespace PhotoStudioApp.Model
         [ForeignKey("Customer")]
         public int CustomerID { get; set; }
         [ForeignKey("Photograph")]
-        public int PhotographID { get; set; }
+        public int? PhotographID { get; set; }
         [ForeignKey("Visagiste")]
-        public int VisagisteID { get; set; }
+        public int? VisagisteID { get; set; }
         [ForeignKey("Hall")]
         public int HallID{ get; set; }
         [ForeignKey("Services")]
@@ -40,7 +40,6 @@ namespace PhotoStudioApp.Model
         public virtual Services Services { get; set; }
         public virtual List<AdditionalService> AdditionalService { get; set; }
         public virtual Review Review { get; set; }
-
-         public virtual Payment Payment { get; set; }
+        public virtual Payment Payment { get; set; }
     }
 }

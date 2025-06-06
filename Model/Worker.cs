@@ -23,6 +23,8 @@ namespace PhotoStudioApp.Model
         public string LastName { get; set; }
         [Required]
         public Post Post { get; set; }
+        public bool IsOnBookin { get; set; } = false;
+        public byte[]? MyWorks { get; set; } = null;
         public string FullName
         {
             get

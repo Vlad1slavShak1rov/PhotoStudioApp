@@ -35,7 +35,7 @@
 
             <StackPanel>
                 <Label Content = "Теперь, расскажите что вам понравилось" FontSize="16" FontWeight="Bold" Foreground="{StaticResource add}"/>
-                <TextBox Name="ReviewTextBox" Height="200" Margin="10 0 10 0"/>
+                <TextBox Name="ReviewTextBox" Height="200" Margin="10 0 10 0" PreviewTextInput="ReviewTextBox_PreviewTextInput"/>
             </StackPanel>
             <Grid>
                 <Button Name="ExitButton" Content="Закрыть" HorizontalAlignment="Left" Margin="10" Width="120" Height="30" Click="ExitButton_Click"/>

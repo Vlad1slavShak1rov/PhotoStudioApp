@@ -2,6 +2,7 @@
 using PhotoStudioApp.Database.DBContext;
 using PhotoStudioApp.Helper;
 using PhotoStudioApp.Model;
+using PhotoStudioApp.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,15 +32,14 @@ namespace PhotoStudioApp.Views
         {
             InitializeComponent();
             _currentWorker = worker;
-            InitData();
+            _ = InitData();
         }
 
-        private void InitData()
+        private async Task InitData()
         {
-            using var context = new MyDBContext();
-            RepositoryUser repositoryUser = new(context);
+            UserApiService userApiService = new();
             //Получаем пользователя по ID
-            _currentUser = repositoryUser.GetByID(_currentWorker.UserID);
+            _currentUser = await userApiService.GetById(_currentWorker.UserID);
 
             SecondNameBox.Text = _currentWorker.SecondName;
             NameBox.Text = _currentWorker.Name;
@@ -72,11 +72,10 @@ namespace PhotoStudioApp.Views
             Close?.Invoke(this, e);
         }
 
-        private void Update()
+        private async void Update()
         {
-            using var context = new MyDBContext();
-            RepositoryUser repositoryUser = new(context);
-            RepositoryWorker repositoryWorker = new(context);
+            UserApiService userApiService = new();
+            WorkerApiService workerApiService = new();
 
             //Меняем свойства у существующих моделей
             _currentUser.Login = LoginBox.Text;
@@ -86,14 +85,22 @@ namespace PhotoStudioApp.Views
             _currentWorker.Name = NameBox.Text;
             _currentWorker.LastName = LastNameBox.Text;
 
-            //Обновляем
-            repositoryUser.Update(_currentUser);
-            repositoryWorker.Update(_currentWorker);
+            //Конвертируем в DTO
+            var dtoUser = ConvertToDTO.ToUserDTO(_currentUser);
+            var dtoWorker = ConvertToDTO.ToWorkerDTO(_currentWorker);
 
+            //Обновляем
+            await userApiService.Update(dtoUser);
+            await workerApiService.Update(dtoWorker);
             Message.Success("Успешно!");
 
             //Вызываем событие
             Close?.Invoke(this, null);
+        }
+
+        private void SecondNameBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !Validator.IsLetter(e.Text[0]);
         }
     }
 }

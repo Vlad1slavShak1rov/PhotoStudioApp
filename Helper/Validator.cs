@@ -12,5 +12,10 @@ namespace PhotoStudioApp.Helper
         {
             return values.All(value => !string.IsNullOrWhiteSpace(value));
         }
+
+        public static bool IsDigit(char e) => char.IsDigit(e);
+        public static bool IsLetter(char e) => char.IsLetter(e);
+        public static bool IsSymbol(char e) => char.IsSymbol(e);
+
     }
 }

@@ -7,11 +7,13 @@ using System.Threading.Tasks;
 
 namespace PhotoStudioApp.Model
 {
-    public class HallDTO
+    public class HallPhoto
     {
-        public int ID { get; set; }
-        public string Description { get; set; }
-        public double Cost { get; set; }
-        public string? AvailableServices { get; set; }
+        [Key]
+        public int Id { get; set; }
+        public int HallId { get; set; }
+        public byte[]? Image { get; set; }
+
+        public virtual Hall Hall { get; set; }
     }
 }

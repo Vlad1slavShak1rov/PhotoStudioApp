@@ -66,7 +66,7 @@ namespace PhotoStudioApp.Views
                                     Role = Enums.Role.Worker
                                 };
                                 //Добавляем в БД
-                                await userApiService.Create(userDTO);
+                                int userId = await userApiService.Create(userDTO);
 
                                 Enum post;
                                 //В зависимости от выбранного элемента в ComboBox присваиваем значение
@@ -77,7 +77,7 @@ namespace PhotoStudioApp.Views
                                     Name = NameBox.Text,
                                     LastName = LastNameBox.Text,
                                     SecondName = SecondNameBox.Text,
-                                    UserID = userDTO.ID,
+                                    UserID = userId,
                                     Post = (Enums.Post)post
                                 };
 
@@ -101,6 +101,11 @@ namespace PhotoStudioApp.Views
                 BackButton.IsEnabled = true;
                 SaveButton.IsEnabled = true;
             }
+        }
+
+        private void LoginBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !Validator.IsLetter(e.Text[0]) || Validator.IsSymbol(e.Text[0]);
         }
     }
 }

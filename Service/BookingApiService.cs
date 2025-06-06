@@ -40,16 +40,26 @@ namespace PhotoStudioApp.Service
         public async Task<Booking> GetByPhotographId(int id)
         {
             var url = $"{BaseUrl}/byPhotographID/{id}";
-            return await httpClient.GetFromJsonAsync<Booking>(url);
+            var res = await httpClient.GetAsync(url);
+            if (res.IsSuccessStatusCode)
+            {
+                return await res.Content.ReadFromJsonAsync<Booking>();
+            }
+            return null;
         }
         public async Task<Booking> GetByVisagisteID(int id)
         {
             var url = $"{BaseUrl}/byVisagisteID/{id}";
-            return await httpClient.GetFromJsonAsync<Booking>(url);
+            var res = await httpClient.GetAsync(url);
+            if (res.IsSuccessStatusCode)
+            {
+                return await res.Content.ReadFromJsonAsync<Booking>();
+            }
+            return null;
         }
         public async Task<int> Create(BookingServiceDTO bookingServiceDTO)
         {
-            var res = await httpClient.PatchAsJsonAsync(BaseUrl, bookingServiceDTO);
+            var res = await httpClient.PostAsJsonAsync(BaseUrl, bookingServiceDTO);
             if (!res.IsSuccessStatusCode)
             {
                 System.Windows.MessageBox.Show(res.ReasonPhrase, "Ошибка");

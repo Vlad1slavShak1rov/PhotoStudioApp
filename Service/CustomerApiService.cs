@@ -1,4 +1,5 @@
-﻿using PhotoStudioApp.Model;
+﻿using Azure;
+using PhotoStudioApp.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,19 +25,25 @@ namespace PhotoStudioApp.Service
         public async Task<Customer> GetByUserId(int userId)
         {
             var url = $"{BaseUrl}/byUser/{userId}";
-            return await httpClient.GetFromJsonAsync<Customer>(url);
+
+            var res = await httpClient.GetAsync(url);
+            if (res.IsSuccessStatusCode)
+            {
+                return await res.Content.ReadFromJsonAsync<Customer>();
+            }
+            else return null;
         }
         public async Task<int> Create(CustomerDTO bookingServiceDTO)
         {
-            var res = await httpClient.PatchAsJsonAsync(BaseUrl, bookingServiceDTO);
+            var res = await httpClient.PostAsJsonAsync(BaseUrl, bookingServiceDTO);
             if (!res.IsSuccessStatusCode)
             {
                 System.Windows.MessageBox.Show(res.ReasonPhrase, "Ошибка");
                 return -1;
             }
 
-            var content = await res.Content.ReadFromJsonAsync<Dictionary<string, int>>();
-            return content["id"];
+            var content = await res.Content.ReadFromJsonAsync<Customer>();
+            return content.ID;
         }
         public async Task<bool> Update(CustomerDTO bookingServiceDTO)
         {

@@ -30,7 +30,7 @@
             <StackPanel Grid.Row="1" Grid.Column="0">
 
                 <Label Content="Логин" FontSize="16"/>
-                <TextBox Name="LoginBox" Width="200" HorizontalAlignment="Left" Margin="5 0 0 0" FontSize="16"/>
+                <TextBox Name="LoginBox" Width="200" HorizontalAlignment="Left" Margin="5 0 0 0" FontSize="16" PreviewTextInput="LoginBox_PreviewTextInput"/>
 
                 <Label Content="Пароль" FontSize="16"/>
                 <PasswordBox Name="PasswordBoxOne" Width="200" HorizontalAlignment="Left" Margin="5 0 0 0" FontSize="16"/>
@@ -42,13 +42,13 @@
 
             <StackPanel Grid.Column="1">
                 <Label Content="Фамилия"  FontSize="16"/>
-                <TextBox Name="SecondNameBox" Width="200" HorizontalAlignment="Left" Margin="5 0 0 0" FontSize="16"/>
+                <TextBox Name="SecondNameBox" Width="200" HorizontalAlignment="Left" Margin="5 0 0 0" FontSize="16" PreviewTextInput="LoginBox_PreviewTextInput"/>
 
                 <Label Content="Имя"  FontSize="16"/>
-                <TextBox Name="NameBox" Width="200" HorizontalAlignment="Left" Margin="5 0 0 0" FontSize="16"/>
+                <TextBox Name="NameBox" Width="200" HorizontalAlignment="Left" Margin="5 0 0 0" FontSize="16" PreviewTextInput="LoginBox_PreviewTextInput"/>
 
                 <Label Content="Отчество"  FontSize="16"/>
-                <TextBox Name="LastNameBox" Width="200" HorizontalAlignment="Left" Margin="5 0 0 0" FontSize="16"/>
+                <TextBox Name="LastNameBox" Width="200" HorizontalAlignment="Left" Margin="5 0 0 0" FontSize="16" PreviewTextInput="LoginBox_PreviewTextInput"/>
 
                 <Label Content="Должность" FontSize="16"/>
                 <ComboBox Name="PostComboBox" Width="200" Margin="0 0 15 0" SelectedIndex="0" FontSize="16">

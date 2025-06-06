@@ -28,19 +28,22 @@ namespace PhotoStudioApp.Windows
         private SettingsView settingsView;
         private CreateBooking createBooking;
         private HistoryBonusView historyBonusView;
-        public MainWindow(User user)
+        public MainWindow(int userId)
         {
             InitializeComponent();
-            _user = user;
-
+            _ = InitData(userId);
+        }
+        private async Task InitData(int id)
+        {
+            UserApiService userApiService = new();
+            _user = await userApiService.GetById(id);
             if ((Enums.Role)_user.Role == Enums.Role.Customer)
             {
-                _ = InitCustomer();
+                await InitCustomer();
             }
             else if ((Enums.Role)_user.Role == Enums.Role.Worker) WorkerGrid.Visibility = Visibility.Visible;
             else AdminGrid.Visibility = Visibility.Visible;
         }
-
         private async Task InitCustomer()
         {
             CustomerGrid.Visibility = Visibility.Visible;

@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Win32;
 using PdfSharp.Drawing;
 using PdfSharp.Pdf;
 using PdfSharp.UniversalAccessibility.Drawing;
@@ -47,6 +48,7 @@ namespace PhotoStudioApp.Views
 
             this.Loaded +=(e,s) => ServicesComboBox.SelectionChanged += AllCombobox_SelectionChanged;
             this.Loaded += (e, s) => AdditionalServicesCombobox.SelectionChanged += AllCombobox_SelectionChanged;
+            this.Loaded += (e, s) => HallComboBox.SelectionChanged += AllCombobox_SelectionChanged;
         }
 
         private async Task InitCustomer()
@@ -119,35 +121,32 @@ namespace PhotoStudioApp.Views
 
         private async void AllCombobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (AdditionalServicesCombobox.SelectedItem != null && ServicesComboBox.SelectedItem != null)
+            int total = 0;
+            int bonusTotal = 0;
+
+            // Учитываем стоимость зала
+            if (HallComboBox.SelectedItem is Hall hall)
             {
-                sum = 0;
-                if (AdditionalServicesCombobox.SelectedIndex == 0) //если выбрана основная услуга
-                {
-                    if (ServicesComboBox.SelectedItem is Services service)
-                    {
-                        sum = service.CostService;
-                        bonusSum = service.BonusCost;
-                    }
-                }
-                else if (ServicesComboBox.SelectedIndex == 0) //если выбрана только дополнительная услуга
-                {
-                    if (AdditionalServicesCombobox.SelectedItem is AdditionalService additional)
-                    {
-                        sum = (int)additional.Cost;
-                        bonusSum = additional.BonusCost;
-                    }
-                }
-                else //если выбрана основная услуга и дополнительная услуга
-                {
-                    if (AdditionalServicesCombobox.SelectedItem is AdditionalService additional && ServicesComboBox.SelectedItem is Services service)
-                    {
-                        sum = (int)additional.Cost + service.CostService;
-                        bonusSum = additional.BonusCost + service.BonusCost;
-                    }
-                }
-                AmountBlock.Text = $"Итого: {sum} р";
+                total += (int)hall.Cost;
             }
+
+            // Учитываем основную услугу
+            if (ServicesComboBox.SelectedItem is Services service)
+            {
+                total += service.CostService;
+                bonusTotal += (int)(service.BonusCost * 0.01);
+            }
+
+            // Учитываем дополнительную услугу
+            if (AdditionalServicesCombobox.SelectedItem is AdditionalService additional)
+            {
+                total += (int)additional.Cost;
+                bonusTotal += (int)(additional.BonusCost * 0.01);
+            }
+
+            sum = total;
+            bonusSum = bonusTotal;
+            AmountBlock.Text = $"Итого: {sum} р";
         }
 
         private async void PayButton_Click(object sender, RoutedEventArgs e)
@@ -176,7 +175,7 @@ namespace PhotoStudioApp.Views
                 return;
             }
 
-            if (photograph != null && visagiste != null && hall != null && services != null)
+            if (hall != null && services != null)
             {
                 int? addServiceID = null;
                 
@@ -218,12 +217,14 @@ namespace PhotoStudioApp.Views
                 var customerDTO = ConvertToDTO.ToCustomerDTO( _customer );
                 await customerApiService.Update(customerDTO);
 
+                using var context = new MyDBContext();
+
                 //Инициализации новой брони
                 Booking booking = new()
                 {
                     CustomerID = _customer.ID,
-                    PhotographID = photograph.ID,
-                    VisagisteID = visagiste.ID,
+                    PhotographID = photograph == null ? null : photograph.ID,
+                    VisagisteID = visagiste == null ? null : visagiste.ID,
                     HallID = hall.ID,
                     ServiceID = services.ID,
                     AdditionalServicesID = addServiceID,
@@ -233,6 +234,21 @@ namespace PhotoStudioApp.Views
 
                 var bookingDTO = ConvertToDTO.ToBookingDTO(booking);
                 await bookingApiService.Create(bookingDTO);
+
+                WorkerApiService workerApi = new();
+                if (photograph != null)
+                {
+                    var dto = ConvertToDTO.ToWorkerDTO(photograph);
+                    dto.IsOnBookin = true;
+                    await workerApi.Update(dto);
+                } 
+                if(visagiste != null)
+                {
+                    var dto = ConvertToDTO.ToWorkerDTO(visagiste);
+                    dto.IsOnBookin = true;
+                    await workerApi.Update(dto);
+                }
+
 
                 var payment = PaymentMethodBox.SelectedItem as ComboBoxItem;
 

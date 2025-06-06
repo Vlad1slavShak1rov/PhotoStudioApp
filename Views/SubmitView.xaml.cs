@@ -132,5 +132,10 @@ namespace PhotoStudioApp.Views
         {
             CloseControl?.Invoke(this, e);
         }
+
+        private void ReviewTextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !Validator.IsLetter(e.Text[0]) || !Validator.IsDigit(e.Text[0]);
+        }
     }
 }

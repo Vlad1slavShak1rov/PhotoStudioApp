@@ -55,16 +55,25 @@ namespace PhotoStudioApp.Views
             CustomerApiService customerApiService = new();
 
             _customer = await customerApiService.GetById(booking.CustomerID);
-            var photograph = await workerApiService.GetByPhotograph(booking.PhotographID);
-            var visagiste = await workerApiService.GetByVisagiste(booking.VisagisteID);
+
+            Worker photograph = null, visagiste = null;
+            if (booking.PhotographID ==null || booking.VisagisteID == null)
+            {
+                photograph = await workerApiService.GetByPhotograph(booking.PhotographID!.Value);
+                visagiste = await workerApiService.GetByVisagiste(booking.VisagisteID!.Value);
+            }
+          
             _hall = await hallApiService.GetById(booking.HallID);
             mainService = await serviceApiService.GetById(booking.ServiceID);
 
             int? addServiceID = booking.AdditionalServicesID;
             if(addServiceID != null) additionalService = await additionalServiceApi.GetById(addServiceID!.Value);
 
-            PhotographLabel.Content = $"Фотограф: {photograph.Name} {photograph.LastName}";
-            VisagisteLabel.Content = $"Визажист: {visagiste.Name} {visagiste.LastName}";
+            string photographText = photograph == null ? "Без фотографа" : $"{photograph.Name} {photograph.LastName}";
+            string visagisteText = visagiste == null ? "Без визажиста" : $"{visagiste.Name} {visagiste.LastName}";
+
+            PhotographLabel.Content = $"Фотограф: {photographText}";
+            VisagisteLabel.Content = $"Визажист: {visagisteText}";
             ServiceLabel.Content = $"Услуга: {mainService.ServiceName}";
 
             if (additionalService != null) AddServiceLabel.Content = $"Дополнителньая услуга: {additionalService.ServiceName}";

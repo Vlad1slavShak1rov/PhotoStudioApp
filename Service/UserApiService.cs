@@ -20,24 +20,42 @@ namespace PhotoStudioApp.Service
         public async Task<User> GetById(int id)
         {
             var url = $"{BaseUrl}/id/{id}";
-            return await httpClient.GetFromJsonAsync<User>(url);
+            var res = await httpClient.GetAsync(url);
+            if (res.IsSuccessStatusCode)
+            {
+                return await httpClient.GetFromJsonAsync<User>(url);
+            }
+            return null;
         }
         public async Task<User> GetByLogin(string login)
         {
             var url = $"{BaseUrl}/login/{login}";
-            return await httpClient.GetFromJsonAsync<User>(url);
+            var response = await httpClient.GetAsync(url);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<User>();
+            }
+
+            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return null;
+            }
+
+            response.EnsureSuccessStatusCode();
+            return null;
         }
         public async Task<int> Create(UserDTO entity)
         {
-            var res = await httpClient.PatchAsJsonAsync(BaseUrl, entity);
+            var res = await httpClient.PostAsJsonAsync(BaseUrl, entity);
             if (!res.IsSuccessStatusCode)
             {
                 System.Windows.MessageBox.Show(res.ReasonPhrase, "Ошибка");
                 return -1;
             }
 
-            var content = await res.Content.ReadFromJsonAsync<Dictionary<string, int>>();
-            return content["id"];
+            var user = await res.Content.ReadFromJsonAsync<User>();
+            return user.ID;
         }
         public async Task<bool> Update(UserDTO entity)
         {

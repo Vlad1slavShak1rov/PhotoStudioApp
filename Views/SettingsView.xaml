@@ -18,15 +18,15 @@
             <Label Content="Настройки" HorizontalAlignment="Center" FontSize="24" FontWeight="ExtraBold" Foreground="{StaticResource add}"/>
             <StackPanel>
                 <Label Content="Фамилия" FontSize="16" Margin="10 0 0 0" Foreground="{StaticResource ButtonColor}" FontWeight="Bold"/>
-                <TextBox Name="SurnameTextBox" Width="200" Height="25" Margin="10 0 0 0" HorizontalAlignment="Left" FontSize="16"/>
+                <TextBox Name="SurnameTextBox" Width="200" Height="25" Margin="10 0 0 0" HorizontalAlignment="Left" FontSize="16" PreviewTextInput="SurnameTextBox_PreviewTextInput"/>
             </StackPanel>
             <StackPanel>
                 <Label Content="Имя" FontSize="16" Margin="10 0 0 0" Foreground="{StaticResource ButtonColor}" FontWeight="Bold"/>
-                <TextBox Name="NameTextBox" Width="200" Height="25" Margin="10 0 0 0" HorizontalAlignment="Left" FontSize="16"/>
+                <TextBox Name="NameTextBox" Width="200" Height="25" Margin="10 0 0 0" HorizontalAlignment="Left" FontSize="16" PreviewTextInput="SurnameTextBox_PreviewTextInput"/>
             </StackPanel>
             <StackPanel>
                 <Label Content="Отчество" FontSize="16" Margin="10 0 0 0" Foreground="{StaticResource ButtonColor}" FontWeight="Bold"/>
-                <TextBox Name="LastNameBox" Width="200" Height="25" Margin="10 0 0 0" HorizontalAlignment="Left" FontSize="16"/>
+                <TextBox Name="LastNameBox" Width="200" Height="25" Margin="10 0 0 0" HorizontalAlignment="Left" FontSize="16" PreviewTextInput="SurnameTextBox_PreviewTextInput"/>
             </StackPanel>
             <StackPanel>
                 <Label Content="Должность" FontSize="16" Margin="10 0 0 0" Foreground="{StaticResource ButtonColor}" FontWeight="Bold"/>

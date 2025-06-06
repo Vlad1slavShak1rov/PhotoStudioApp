@@ -66,19 +66,20 @@ namespace PhotoStudioApp.Windows
                                 Password = PasswordBoxOne.Password,
                                 Role = Enums.Role.Customer
                             };
-                            await userApi.Create(userDTO);
+                            var userId = await userApi.Create(userDTO);
 
                             CustomerDTO customerDTO = new()
                             {
                                 Name = NameBox.Text,
-                                UserID = user.ID,
+                                UserID = userId,
                                 SecondName = SecondName.Text,
                                 LastName = LastName.Text,
                                 Contact = ContactBox.Text
                             };
 
                             await customerApi.Create(customerDTO);
-                            MainWindow mainWindow = new(user);
+
+                            MainWindow mainWindow = new(userId);
                             mainWindow.Show();
                             this.Close();
                             Message.Success("Успешно!");
@@ -98,6 +99,11 @@ namespace PhotoStudioApp.Windows
                 SingUpButton.IsEnabled = true;
                 SignUpButton.IsEnabled = true;
             }
+        }
+
+        private void StringCheck_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !Validator.IsLetter(e.Text[0]) || Validator.IsSymbol(e.Text[0]);
         }
     }
 }

@@ -13,7 +13,9 @@ namespace PhotoStudioApp.Model
         public int ID { get; set; }
         [Required]
         public string Description { get; set; }
-        public bool IsBooking { get; set; } = false;
+        public double Cost { get; set; }
+
+        public virtual List<HallPhoto> HallPhotos { get; set; }
 
         public virtual List<Booking> Bookings { get; set; }
     }

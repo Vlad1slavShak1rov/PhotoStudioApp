@@ -102,5 +102,15 @@ namespace PhotoStudioApp.Views
             }
             else Message.Warning("У вас есть незаполненные поля!");
         }
+
+        private void ServiceNameBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !Validator.IsLetter(e.Text[0]);
+        }
+
+        private void CostBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            e.Handled = !Validator.IsDigit(e.Text[0]);
+        }
     }
 }

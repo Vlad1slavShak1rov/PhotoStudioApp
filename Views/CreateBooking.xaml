@@ -90,6 +90,7 @@
 
                     <TextBlock Name="AmountBlock" Text="Итого: 0.0р" Margin="0 70 0 0" FontSize="30" Foreground="{DynamicResource BackgroundColor}" HorizontalAlignment="Left" FontWeight="Bold"/>
                 <Button Name="PayButton" Content="Оплатить"  Style="{StaticResource ButtonStyle}" Height="30" Click="PayButton_Click"/>
+                <Label Content="Обратите внимение,&#10;На то, что оплата будет проходить&#10;Непосредственно в студии!"/> 
             </StackPanel>
         </StackPanel>
     </Grid>

@@ -86,7 +86,7 @@ public partial class LoginWindow : Window
                         }
 
                         Message.Success("Успешно!");
-                        MainWindow mainWindow = new(user);
+                        MainWindow mainWindow = new(user.ID);
                         mainWindow.Show();
                         this.Close();
                     }
@@ -115,5 +115,9 @@ public partial class LoginWindow : Window
             PasswordBox.IsEnabled = true;
             SignUpButton.IsEnabled = true;
         }
+    }
+    private void LoginBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+    {
+        e.Handled = !Validator.IsLetter(e.Text[0]) || Validator.IsSymbol(e.Text[0]);
     }
 }

@@ -38,13 +38,13 @@
 
                     <StackPanel Grid.Column="0" Margin="0 0 40 0">
                         <TextBlock Text="Имя" HorizontalAlignment="Center"  Style="{StaticResource TextBlockStyle}"/>
-                        <TextBox Name="NameBox" Width="170"/>
+                        <TextBox Name="NameBox" Width="170" PreviewTextInput="StringCheck_PreviewTextInput"/>
 
                         <TextBlock Text="Фамилия" HorizontalAlignment="Center"  Style="{StaticResource TextBlockStyle}"/>
-                        <TextBox Name="SecondName" Width="170"/>
+                        <TextBox Name="SecondName" Width="170" PreviewTextInput="StringCheck_PreviewTextInput"/>
 
                         <TextBlock Text="Отчество" HorizontalAlignment="Center"  Style="{StaticResource TextBlockStyle}"/>
-                        <TextBox Name="LastName" Width="170"/>
+                        <TextBox Name="LastName" Width="170" PreviewTextInput="StringCheck_PreviewTextInput"/>
 
                         <TextBlock Text="Контакты" HorizontalAlignment="Center"  Style="{StaticResource TextBlockStyle}"/>
                         <TextBox Name="ContactBox" Width="170"/>
@@ -53,10 +53,10 @@
 
                     <StackPanel Grid.Column="1">
                         <TextBlock Text="Логин" HorizontalAlignment="Center" Style="{StaticResource TextBlockStyle}"/>
-                        <TextBox Name="LoginBox" Width="170"/>
+                        <TextBox Name="LoginBox" Width="170" PreviewTextInput="StringCheck_PreviewTextInput"/>
 
                         <TextBlock Text="Пароль" HorizontalAlignment="Center" Style="{StaticResource TextBlockStyle}"/>
-                        <PasswordBox Name="PasswordBoxOne" Width="170"/>
+                        <PasswordBox Name="PasswordBoxOne" Width="170" />
 
                         <TextBlock Text="Повторный пароль" HorizontalAlignment="Center" Style="{StaticResource TextBlockStyle}"/>
                         <PasswordBox Name="PasswordBoxTwo" Width="170"/>
