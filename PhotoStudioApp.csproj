@@ -9,11 +9,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Pictures\3893607.png" />
     <None Remove="Resources\Pictures\cameraIco.png" />
     <None Remove="Resources\Pictures\createBooking.png" />
     <None Remove="Resources\Pictures\extIco.png" />
+    <None Remove="Resources\Pictures\galery.png" />
     <None Remove="Resources\Pictures\moneyIco.png" />
     <None Remove="Resources\Pictures\myOrderIco.png" />
+    <None Remove="Resources\Pictures\noImages.png" />
     <None Remove="Resources\Pictures\settings.png" />
     <None Remove="Resources\Pictures\viewsIco.png" />
     <None Remove="Resources\Pictures\workerIco.png" />
@@ -36,14 +39,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\Pictures\3893607.png" />
     <Resource Include="Resources\Pictures\cameraIco.png" />
     <Resource Include="Resources\Pictures\extIco.png" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="Resources\Pictures\createBooking.png" />
+    <Resource Include="Resources\Pictures\galery.png" />
     <Resource Include="Resources\Pictures\moneyIco.png" />
     <Resource Include="Resources\Pictures\myOrderIco.png" />
+    <Resource Include="Resources\Pictures\noImages.png" />
     <Resource Include="Resources\Pictures\settings.png" />
     <Resource Include="Resources\Pictures\viewsIco.png" />
     <Resource Include="Resources\Pictures\workerIco.png" />

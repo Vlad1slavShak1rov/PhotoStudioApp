@@ -24,7 +24,12 @@ namespace PhotoStudioApp.Service
         public async Task<List<HistoryPointsReceived>> GetByCustomerId(int userId)
         {
             var url = $"{BaseUrl}/byUser/{userId}";
-            return await httpClient.GetFromJsonAsync<List<HistoryPointsReceived>>(url);
+            var res = await httpClient.GetAsync(url);
+            if (res.IsSuccessStatusCode)
+            {
+                return await res.Content.ReadFromJsonAsync<List<HistoryPointsReceived>>();
+            }
+            return null;
         }
         public async Task<int> Create(HistoryPointsReceivedDTO bookingServiceDTO)
         {
@@ -35,8 +40,8 @@ namespace PhotoStudioApp.Service
                 return -1;
             }
 
-            var content = await res.Content.ReadFromJsonAsync<Dictionary<string, int>>();
-            return content["id"];
+            var content = await res.Content.ReadFromJsonAsync<int>();
+            return content;
         }
         public async Task<bool> Update(HistoryPointsReceivedDTO bookingServiceDTO)
         {

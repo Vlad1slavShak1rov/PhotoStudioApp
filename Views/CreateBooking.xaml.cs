@@ -233,7 +233,7 @@ namespace PhotoStudioApp.Views
                 };
 
                 var bookingDTO = ConvertToDTO.ToBookingDTO(booking);
-                await bookingApiService.Create(bookingDTO);
+                int bookingId = await bookingApiService.Create(bookingDTO);
 
                 WorkerApiService workerApi = new();
                 if (photograph != null)
@@ -260,7 +260,7 @@ namespace PhotoStudioApp.Views
                 //Добавляем чек
                 Payment paymentNew = new()
                 {
-                    BookingID = booking.ID,
+                    BookingID = bookingId,
                     Amount = (decimal)booking.CostServices,
                     PaymentMethod = method,
                     PaymentDate = DateTime.Now,

@@ -25,6 +25,7 @@ namespace PhotoStudioApp.Windows
     {
         private User _user;
         private Customer _customer;
+        private Worker worker;
         private SettingsView settingsView;
         private CreateBooking createBooking;
         private HistoryBonusView historyBonusView;
@@ -41,9 +42,20 @@ namespace PhotoStudioApp.Windows
             {
                 await InitCustomer();
             }
-            else if ((Enums.Role)_user.Role == Enums.Role.Worker) WorkerGrid.Visibility = Visibility.Visible;
+            else if ((Enums.Role)_user.Role == Enums.Role.Worker)
+            {
+                await InitWorker(id);
+            }
+
             else AdminGrid.Visibility = Visibility.Visible;
         }
+        private async Task InitWorker(int userId)
+        {
+            WorkerApiService workerApi = new();
+            worker = await workerApi.GetByUserId(userId);
+            WorkerGrid.Visibility = Visibility.Visible;
+        }
+
         private async Task InitCustomer()
         {
             CustomerGrid.Visibility = Visibility.Visible;
@@ -175,6 +187,27 @@ namespace PhotoStudioApp.Windows
             historyBonusView.BackClick -= HistoryBonusView_BackClick;
             historyBonusView = null;
             MainGrid.Children.Clear();
+        }
+
+        private void MyWork_Click(object sender, RoutedEventArgs e)
+        {
+            WorkerMainPanel.Children.Clear();
+            MyWorkfView myWorkfView = new(worker);
+            WorkerMainPanel.Children.Add(myWorkfView);
+        }
+
+        private void GaleryButton_Click(object sender, RoutedEventArgs e)
+        {
+            MainGrid.Children.Clear();
+            Gallery gallery = new Gallery();
+            MainGrid.Children.Add(gallery);
+        }
+
+        private void HallGalery_Click(object sender, RoutedEventArgs e)
+        {
+            AdminMainPanel.Children.Clear();
+            HallPhotosList ListServices = new();
+            AdminMainPanel.Children.Add(ListServices);
         }
     }
 }

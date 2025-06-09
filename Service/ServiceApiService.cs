@@ -35,8 +35,8 @@ namespace PhotoStudioApp.Service
                 return -1;
             }
 
-            var content = await res.Content.ReadFromJsonAsync<Dictionary<string, int>>();
-            return content["id"];
+            var content = await res.Content.ReadFromJsonAsync<int>();
+            return content;
         }
         public async Task<bool> Update(ServiceDTO entity)
         {

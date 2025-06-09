@@ -1,7 +1,9 @@
-﻿using PhotoStudioApp.Model;
+﻿using PhotoStudioApp.Database.DAL;
+using PhotoStudioApp.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,7 +25,12 @@ namespace PhotoStudioApp.Service
         public async Task<Review> GetByBookingID(int id)
         {
             var url = $"{BaseUrl}/byBooking/{id}";
-            return await httpClient.GetFromJsonAsync<Review>(url);
+            var res = await httpClient.GetAsync(url);
+            if (res.IsSuccessStatusCode && res.StatusCode != System.Net.HttpStatusCode.NoContent)
+            {
+                return await res.Content.ReadFromJsonAsync<Review>();
+            }
+            else return null;
         }
         public async Task<int> Create(ReviewDTO bookingServiceDTO)
         {
@@ -34,8 +41,8 @@ namespace PhotoStudioApp.Service
                 return -1;
             }
 
-            var content = await res.Content.ReadFromJsonAsync<Dictionary<string, int>>();
-            return content["id"];
+            var content = await res.Content.ReadFromJsonAsync<int>();
+            return content;
         }
         public async Task<bool> Update(ReviewDTO bookingServiceDTO)
         {

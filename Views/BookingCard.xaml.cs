@@ -57,7 +57,7 @@ namespace PhotoStudioApp.Views
             _customer = await customerApiService.GetById(booking.CustomerID);
 
             Worker photograph = null, visagiste = null;
-            if (booking.PhotographID ==null || booking.VisagisteID == null)
+            if (booking.PhotographID == null && booking.VisagisteID == null)
             {
                 photograph = await workerApiService.GetByPhotograph(booking.PhotographID!.Value);
                 visagiste = await workerApiService.GetByVisagiste(booking.VisagisteID!.Value);

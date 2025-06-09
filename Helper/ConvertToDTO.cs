@@ -29,11 +29,11 @@ namespace PhotoStudioApp.Helper
             return new BookingServiceDTO()
             {
                 ID = booking.ID,
-                CustomerID = booking.ID,
-                PhotographID = booking.ID,
-                VisagisteID = booking.ID,
-                HallID = booking.ID,
-                ServiceID = booking.ID,
+                CustomerID = booking.CustomerID,
+                PhotographID = booking.PhotographID,
+                VisagisteID = booking.VisagisteID,
+                HallID = booking.HallID,
+                ServiceID = booking.ServiceID,
                 AdditionalServicesID = booking.AdditionalServicesID,
                 CostServices = booking.CostServices,
                 DateBooking = booking.DateBooking
@@ -84,7 +84,6 @@ namespace PhotoStudioApp.Helper
                 SecondName = worker.SecondName,
                 LastName = worker.LastName,
                 IsOnBookin = worker.IsOnBookin,
-                MyWorks = worker.MyWorks,
                 Post = worker.Post,
             };
         }

@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="PhotoStudioApp.Views.MyWorksCardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PhotoStudioApp.Views"
+             mc:Ignorable="d" 
+             Height="250" Width="250">
+    <Border Background="#FFFAFAFA" BorderBrush="#CCC" BorderThickness="1" CornerRadius="10" Padding="10" Margin="5">
+        <StackPanel HorizontalAlignment="Center">
+            <Image x:Name="PhotoImage"
+                   Width="230" Height="150"
+                   Stretch="Uniform"
+                   Margin="0,0,0,10"
+                   ClipToBounds="True"
+                   />
+            <TextBlock x:Name="DescriptionText"
+                       TextWrapping="Wrap"
+                       TextAlignment="Center"
+                       FontSize="14"
+                       Foreground="Black"
+                       />
+        </StackPanel>
+    </Border>
+</UserControl>

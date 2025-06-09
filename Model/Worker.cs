@@ -24,7 +24,6 @@ namespace PhotoStudioApp.Model
         [Required]
         public Post Post { get; set; }
         public bool IsOnBookin { get; set; } = false;
-        public byte[]? MyWorks { get; set; } = null;
         public string FullName
         {
             get
@@ -34,5 +33,8 @@ namespace PhotoStudioApp.Model
         }
         public virtual User User { get; set; }
         public virtual Booking Booking { get; set; }
+        public virtual List<ImagePhotograph> ImagePhotographs { get; set; }
+        public virtual List<Booking> AsPhotographBookings { get; set; } = new();
+        public virtual List<Booking> AsVisagisteBookings { get; set; } = new();
     }
 }
